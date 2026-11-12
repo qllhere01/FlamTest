@@ -1,0 +1,4247 @@
+local _0x4f2a = cloneref or function(_) return _ end
+local _0xb8c1 = _0x4f2a(game:GetService("Players"))
+local _0x3e7d = _0x4f2a(game:GetService("UserInputService"))
+local _0x91af = _0x4f2a(game:GetService("Workspace"))
+local _0x55c0 = _0x4f2a(game:GetService("RunService"))
+local _0x72d4 = _0x4f2a(game:GetService("ReplicatedStorage"))
+local _0x1bc9 = _0x4f2a(game:GetService("HttpService"))
+local _0xa4e6 = _0x4f2a(game:GetService("Lighting"))
+local _0xd3f8 = _0x4f2a(game:GetService("TweenService"))
+local _0x4c1d = _0x4f2a(game:GetService("CollectionService"))
+local _0x60b2 = _0x4f2a(game:GetService("CoreGui"))
+local _0x8ca5 = _0xb8c1.LocalPlayer
+local _0x47e3 = _0x91af.CurrentCamera
+
+local _0x0c84 = getgenv()
+_0x0c84.__flamingo = _0x0c84.__flamingo or false
+if _0x0c84.__flamingo then return end
+_0x0c84.__flamingo = true
+
+if not isfolder("Flamingo") then makefolder("Flamingo") end
+if not isfolder("Flamingo/configs") then makefolder("Flamingo/configs") end
+print("[Flamingo] Loading library...")
+local _0xLIB = loadstring(game:HttpGet("https://raw.githubusercontent.com/deividcomsono/Obsidian/main/Library.lua"))()
+
+local _0xOPTS = _0xLIB and _0xLIB.Options
+local _0xTGLS = _0xLIB and _0xLIB.Toggles
+
+if not _0xLIB then
+    _0x0c84.__flamingo = false
+    return
+end
+
+if _0xLIB.Scheme then
+    _0xLIB.Scheme.AccentColor = Color3.fromRGB(255, 105, 180)
+    _0xLIB.Scheme.OutlineColor = Color3.fromRGB(58, 38, 50)
+    _0xLIB.Scheme.MainColor = Color3.fromRGB(26, 20, 24)
+    _0xLIB.Scheme.BackgroundColor = Color3.fromRGB(16, 12, 15)
+    pcall(function() _0xLIB:UpdateColorsUsingRegistry() end)
+end
+
+local _0xWIN = _0xLIB:CreateWindow({
+    Title = "Flamingo",
+    Footer = "Flamingo",
+    Center = true,
+    AutoShow = true,
+    NotifySide = "Right",
+    ShowCustomCursor = true
+})
+local _0xT0 = _0xWIN:AddTab("Home", "house")
+local _0xT1 = _0xWIN:AddTab("Visuals", "eye")
+local _0xT2 = _0xWIN:AddTab("Movement", "move")
+local _0xT3 = _0xWIN:AddTab("Combat", "crosshair")
+local _0xT4 = _0xWIN:AddTab("Farm", "wheat")
+local _0xT5 = _0xWIN:AddTab("Utility", "wrench")
+local _0xT6 = _0xWIN:AddTab("Troll", "skull")
+local _0xR1 = _0xWIN:AddTab("Aimbot", "crosshair")
+local _0xR2 = _0xWIN:AddTab("ESP", "scan-eye")
+local _0xR3 = _0xWIN:AddTab("Automation", "bot")
+local _0xR4 = _0xWIN:AddTab("Skinchanger", "paintbrush")
+local _0xR5 = _0xWIN:AddTab("World", "globe")
+local _0xA1 = _0xWIN:AddTab("Targeting", "target")
+local _0xT7 = _0xWIN:AddTab("Settings", "settings")
+
+local _0xMM2_TABS = {_0xT1, _0xT3, _0xT4, _0xT5, _0xT6}
+local _0xRIV_TABS = {_0xR1, _0xR2, _0xR3, _0xR4, _0xR5}
+local _0xAR_TABS = {_0xA1, _0xR2}
+local _0xSHARED_TABS = {_0xT2, _0xT7}
+for _, _0xtb in ipairs(_0xMM2_TABS) do _0xtb:SetVisible(false) end
+for _, _0xtb in ipairs(_0xRIV_TABS) do _0xtb:SetVisible(false) end
+for _, _0xtb in ipairs(_0xAR_TABS) do _0xtb:SetVisible(false) end
+for _, _0xtb in ipairs(_0xSHARED_TABS) do _0xtb:SetVisible(false) end
+
+local _0x3fa1 = Color3.fromRGB
+local _0x7ce2 = Vector3.new
+local _0x4b58 = CFrame.new
+local _0xee03 = Instance.new
+local _0x5d9a = math.huge
+local _0x11bf = math.floor
+local _0xc746 = math.clamp
+local _0xd200 = math.random
+local _0x8891 = tick
+local _0xabc0 = task.wait
+local _0x39fd = task.spawn
+local _0x71ee = task.defer
+local _0xbb44 = pcall
+local _0xf5c3 = tostring
+local _0x6790 = pairs
+local _0x1248 = ipairs
+local _0xc9d1 = string.format
+local _0x4401 = table.insert
+
+local _0xC: {[any]: any} = {}
+local _0xFPS = {n = 0, at = 0, v = 0}
+
+local function _0xVEL(_0xpt)
+    local _0xok, _0xv = pcall(function() return _0xpt.AssemblyLinearVelocity end)
+    if _0xok and _0xv then return _0xv end
+    local _0xok2, _0xv2 = pcall(function() return _0xpt.Velocity end)
+    if _0xok2 and _0xv2 then return _0xv2 end
+    return Vector3.zero
+end
+
+local function _0xLEAD(_0xpt, _0xamt, _0xvert)
+    if not _0xpt then return nil end
+    local _0xp = _0xpt.Position
+    if not _0xamt or _0xamt <= 0 then return _0xp end
+    local _0xv = _0xVEL(_0xpt)
+    if not _0xvert then _0xv = Vector3.new(_0xv.X, 0, _0xv.Z) end
+    return _0xp + _0xv * _0xamt
+end
+
+local _0xECOL = {
+    box = Color3.fromRGB(255, 255, 255), name = Color3.fromRGB(255, 255, 255),
+    dist = Color3.fromRGB(200, 200, 210), tracer = Color3.fromRGB(255, 255, 255),
+    role = Color3.fromRGB(255, 255, 255), auto = true
+}
+local _0xRCOL = {
+    box = Color3.fromRGB(255, 255, 255), name = Color3.fromRGB(255, 255, 255),
+    hp = nil, dist = Color3.fromRGB(200, 200, 210),
+    tracer = Color3.fromRGB(255, 255, 255), auto = false
+}
+
+local function _0xTHIRD(_0xon)
+    if _0xC.tp then _0xC.tp:Disconnect() _0xC.tp = nil end
+    if _0xon then
+        if _0xC.tporig == nil then
+            _0xC.tporig = {
+                m = _0x8ca5.CameraMode,
+                mn = _0x8ca5.CameraMinZoomDistance,
+                mx = _0x8ca5.CameraMaxZoomDistance
+            }
+        end
+        _0xC.tp = _0x55c0.RenderStepped:Connect(function()
+            pcall(function()
+                if _0x8ca5.CameraMode ~= Enum.CameraMode.Classic then
+                    _0x8ca5.CameraMode = Enum.CameraMode.Classic
+                end
+                if _0x8ca5.CameraMinZoomDistance > 0.5 then _0x8ca5.CameraMinZoomDistance = 0.5 end
+                if _0x8ca5.CameraMaxZoomDistance < 128 then _0x8ca5.CameraMaxZoomDistance = 128 end
+            end)
+        end)
+    else
+        local _0xo = _0xC.tporig
+        if _0xo then
+            pcall(function()
+                _0x8ca5.CameraMode = _0xo.m
+                _0x8ca5.CameraMinZoomDistance = _0xo.mn
+                _0x8ca5.CameraMaxZoomDistance = _0xo.mx
+            end)
+        end
+    end
+end
+
+local function _0xMKCOL(_0xbox, _0xflag, _0xname, _0xdef, _0xset)
+    _0xbb44(function()
+        _0xbox:AddLabel({Text = _0xname}):AddColorPicker(_0xflag, {
+            Default = _0xdef,
+            Title = _0xname,
+            Callback = _0xset
+        })
+    end)
+end
+
+local function _0xMKKEY(_0xbox, _0xflag, _0xname)
+    _0xbb44(function()
+        _0xbox:AddLabel({Text = _0xname .. " Key"}):AddKeyPicker(_0xflag, {
+            Text = _0xname,
+            Default = "MB2",
+            Mode = "Always",
+            Modes = {"Always", "Hold", "Toggle"},
+            Callback = function() end
+        })
+    end)
+end
+
+local function _0xKEY(_0xf)
+    local _0xk = _0xOPTS and _0xOPTS[_0xf]
+    if not _0xk then return true end
+    local _0xok, _0xst = pcall(function() return _0xk:GetState() end)
+    if not _0xok then return true end
+    return _0xst and true or false
+end
+
+local _0xROLE_MAP = {
+    Zombie = "Murderer", Vampire = "Murderer", Freezer = "Murderer",
+    Survivor = "Innocent", Hunter = "Innocent", Villager = "Innocent",
+    Runner = "Innocent",
+}
+
+local _0xCOLORS = {
+    Murderer = _0x3fa1(255, 64, 64),
+    Sheriff = _0x3fa1(80, 150, 255),
+    Hero = _0x3fa1(255, 210, 60),
+    Innocent = _0x3fa1(90, 230, 130),
+}
+
+local _0xSTATE = {
+    _e3 = 1000,
+    _e4 = true, _e5 = true, _e6 = true, _e7 = true,
+    _e8 = true, _e9 = true, _ea = 1,
+    _eb = false, _ec = false,
+    _g1 = false, _g2 = false, _g3 = false, _g4 = false,
+    _g5 = false, _g7 = 16, _g8 = 50, _g9 = 60,
+    _h1 = false, _h3 = false, _hc = 0.5,
+    _h4 = false, _h5 = false, _h6 = 120,
+    _h7 = 100, _h8 = false, _ha = 0.2,
+    _h10 = 250, _h11 = false,
+    _k1 = false, _k5 = 1,
+    _a1 = false, _a2 = false, _a3 = false,
+    _a4 = false, _a5 = 1,
+    _a8 = false,
+    _b3 = "",
+    _t1 = false, _t2 = 500, _t3 = false, _t4 = 12, _t5 = 3,
+    _t6 = false, _t7 = false, _t8 = "trooll", _t9 = false, _ta = "trooll",
+    _tb = "none", _tc = false, _td = false, _te = false, _tf = false,
+    _tg = false, _th = 1,
+    _f1 = false, _f2 = 1, _f3 = 24,
+    _wf = false, _wfa = 90, _wm = true,
+    _skn = "Default", _skl = true,
+    _z1 = false, _z2 = 100, _z3 = 0, _z4 = "None", _z5 = 10, _z6 = 25,
+    _z7 = false, _z8 = "None", _z9 = "None", _za = 45, _zb = 15,
+}
+
+local _0xDRAW: {[any]: any} = {}
+local _0xHL: {[any]: any} = {}
+local _0xFARM_LBL: {[any]: any} = {}
+
+local function _0xFC(_0xp, _0xn, _0xr)
+    return _0xp:FindFirstChild(_0xn, _0xr)
+end
+
+local function _0xFCL(_0xp, _0xc)
+    return _0xp:FindFirstChildOfClass(_0xc)
+end
+
+local function _0xGP()
+    return _0xb8c1:GetPlayers()
+end
+
+local function _0xRP(_0xch)
+    if not _0xch then return nil end
+    local _0xr = _0xFC(_0xch, "HumanoidRootPart")
+    return _0xr and _0xr.Position or nil
+end
+
+local function _0xGH(_0xch)
+    if not _0xch then return nil end
+    return _0xFCL(_0xch, "Humanoid")
+end
+
+local function _0xROLE(_0xpl)
+    if _0xpl == _0x8ca5 then return nil end
+    local _0xgp = _0xFC(_0x72d4, "Gameplay")
+    local _0xrn = nil
+
+    if _0xgp then
+        for _, _0xo in _0x6790(_0xgp:GetChildren()) do
+            if _0xo:IsA("ObjectValue") and _0xo.Value == _0xpl then
+                _0xrn = _0xo.Name
+                break
+            end
+        end
+    end
+
+    if not _0xrn then
+        local _0xch = _0xpl.Character
+        local _0xbp = _0xpl:FindFirstChild("Backpack")
+        if (_0xch and _0xFC(_0xch, "Knife")) or (_0xbp and _0xFC(_0xbp, "Knife")) then
+            return "Murderer"
+        end
+        if (_0xch and _0xFC(_0xch, "Gun")) or (_0xbp and _0xFC(_0xbp, "Gun")) then
+            return "Hero"
+        end
+        return "Innocent"
+    end
+
+    local _0xm = _0xROLE_MAP[_0xrn] or _0xrn
+
+    if _0xm == "Innocent" then
+        local _0xch = _0xpl.Character
+        local _0xbp = _0xpl:FindFirstChild("Backpack")
+        if (_0xch and _0xFC(_0xch, "Gun")) or (_0xbp and _0xFC(_0xbp, "Gun")) then
+            _0xm = "Hero"
+        end
+    end
+
+    return _0xm
+end
+
+local function _0xMKDRAW(_0xpl)
+    if _0xDRAW[_0xpl] then return _0xDRAW[_0xpl] end
+    local _0xd = {}
+    _0xd._b = Drawing.new("Square")
+    _0xd._b.Thickness = _0xSTATE._ea
+    _0xd._b.Filled = false
+    _0xd._b.Visible = false
+    _0xd._n = Drawing.new("Text")
+    _0xd._n.Size = 13
+    _0xd._n.Center = true
+    _0xd._n.Outline = true
+    _0xd._n.Visible = false
+    _0xd._ds = Drawing.new("Text")
+    _0xd._ds.Size = 11
+    _0xd._ds.Center = true
+    _0xd._ds.Outline = true
+    _0xd._ds.Visible = false
+    _0xd._tr = Drawing.new("Line")
+    _0xd._tr.Thickness = 2
+    _0xd._tr.Visible = false
+    _0xd._rl = Drawing.new("Text")
+    _0xd._rl.Size = 11
+    _0xd._rl.Center = true
+    _0xd._rl.Outline = true
+    _0xd._rl.Visible = false
+    _0xd._tg = Drawing.new("Text")
+    _0xd._tg.Size = 12
+    _0xd._tg.Center = true
+    _0xd._tg.Outline = true
+    _0xd._tg.Visible = false
+    _0xDRAW[_0xpl] = _0xd
+    return _0xd
+end
+
+local function _0xHIDE(_0xpl)
+    local _0xd = _0xDRAW[_0xpl]
+    if not _0xd then return end
+    for _, _0xo in _0x6790(_0xd) do
+        _0xbb44(function() _0xo.Visible = false end)
+    end
+end
+
+local function _0xRMDRAW(_0xpl)
+    local _0xd = _0xDRAW[_0xpl]
+    if not _0xd then return end
+    for _, _0xo in _0x6790(_0xd) do
+        _0xbb44(function() _0xo:Remove() end)
+    end
+    _0xDRAW[_0xpl] = nil
+end
+
+local function _0xESP()
+    if not _0xSTATE._e1 then
+        for _0xp, _ in _0x6790(_0xDRAW) do _0xHIDE(_0xp) end
+        return
+    end
+    local _0xcam = _0x47e3
+    local _0xvps = _0xcam.ViewportSize
+    local _0xmc = _0x8ca5.Character
+    local _0xmp = _0xmc and _0xRP(_0xmc)
+    if not _0xmp then
+        for _0xp, _ in _0x6790(_0xDRAW) do _0xHIDE(_0xp) end
+        return
+    end
+
+    local _0xvis = {}
+    for _, _0xpl in _0x1248(_0xGP()) do
+        if _0xpl ~= _0x8ca5 then
+            local _0xch = _0xpl.Character
+            if _0xch then
+                local _0xhm = _0xGH(_0xch)
+                local _0xps = _0xRP(_0xch)
+                if _0xhm and _0xps and _0xhm.Health > 0 then
+                    local _0xdt = (_0xmp - _0xps).Magnitude
+                    if _0xdt <= _0xSTATE._e3 then
+                        local _0xrl = _0xROLE(_0xpl)
+                        local _0xsh = true
+                        if _0xrl == "Murderer" and not _0xSTATE._e4 then _0xsh = false end
+                        if _0xrl == "Sheriff" and not _0xSTATE._e5 then _0xsh = false end
+                        if _0xrl == "Hero" and not _0xSTATE._e6 then _0xsh = false end
+                        if _0xrl == "Innocent" and not _0xSTATE._e7 then _0xsh = false end
+                        if _0xsh then
+                            _0xvis[_0xpl] = true
+                            local _0xd = _0xMKDRAW(_0xpl)
+                            local _0xcl = _0xCOLORS[_0xrl] or _0x3fa1(200, 200, 200)
+                            if _0xSTATE._td then _0xcl = Color3.fromHSV((_0x8891() * 0.25) % 1, 0.85, 1) end
+                            local _0xhd = _0xFC(_0xch, "Head")
+                            local _0xhrp = _0xFC(_0xch, "HumanoidRootPart")
+                            if _0xhd and _0xhrp then
+                                local _0xt, _0xot = _0xcam:WorldToViewportPoint(_0xhrp.Position + _0x7ce2(0, 3, 0))
+                                local _0xbt, _0xob = _0xcam:WorldToViewportPoint(_0xhrp.Position - _0x7ce2(0, 4.5, 0))
+                                if _0xot and _0xob then
+                                    local _0xht = math.abs(_0xt.Y - _0xbt.Y)
+                                    local _0xwd = _0xht * 0.6
+                                    local _0xcr = Vector2.new(_0xt.X - _0xwd / 2, _0xt.Y)
+
+                                    if _0xSTATE._e8 then
+                                        _0xd._b.Size = Vector2.new(_0xwd, _0xht)
+                                        _0xd._b.Position = _0xcr
+                                        _0xd._b.Color = _0xECOL.auto and _0xcl or (_0xECOL.box or _0xcl)
+                                        _0xd._b.Thickness = _0xSTATE._ea
+                                        _0xd._b.Visible = true
+                                    else
+                                        _0xd._b.Visible = false
+                                    end
+
+                                    if _0xSTATE._e9 then
+                                        _0xd._n.Position = Vector2.new(_0xt.X, _0xcr.Y - 15)
+                                        _0xd._n.Text = _0xpl.DisplayName
+                                        _0xd._n.Color = _0xECOL.auto and _0xcl or (_0xECOL.name or _0xcl)
+                                        _0xd._n.Visible = true
+                                    else
+                                        _0xd._n.Visible = false
+                                    end
+
+                                    if _0xSTATE._eb then
+                                        _0xd._ds.Position = Vector2.new(_0xt.X, _0xcr.Y + _0xht + 2)
+                                        _0xd._ds.Text = _0x11bf(_0xdt) .. " studs"
+                                        _0xd._ds.Color = _0xECOL.dist or _0x3fa1(200, 200, 210)
+                                        _0xd._ds.Visible = true
+                                    else
+                                        _0xd._ds.Visible = false
+                                    end
+
+                                    if _0xSTATE._ec then
+                                        _0xd._tr.From = Vector2.new(_0xvps.X / 2, _0xvps.Y)
+                                        _0xd._tr.To = Vector2.new(_0xt.X, _0xcr.Y + _0xht)
+                                        _0xd._tr.Color = _0xECOL.auto and _0xcl or (_0xECOL.tracer or _0xcl)
+                                        _0xd._tr.Visible = true
+                                    else
+                                        _0xd._tr.Visible = false
+                                    end
+
+
+                                    if _0xrl then
+                                        _0xd._rl.Position = Vector2.new(_0xt.X, _0xcr.Y - 28)
+                                        _0xd._rl.Text = "[" .. _0xrl .. "]"
+                                        _0xd._rl.Color = _0xECOL.auto and _0xcl or (_0xECOL.role or _0xcl)
+                                        _0xd._rl.Visible = true
+                                    else
+                                        _0xd._rl.Visible = false
+                                    end
+
+                                    if _0xSTATE._t9 and _0xSTATE._ta ~= "" then
+                                        _0xd._tg.Position = Vector2.new(_0xt.X, _0xcr.Y - 41)
+                                        _0xd._tg.Text = _0xSTATE._ta
+                                        _0xd._tg.Color = _0x3fa1(255, 90, 160)
+                                        _0xd._tg.Visible = true
+                                    else
+                                        _0xd._tg.Visible = false
+                                    end
+                                else
+                                    _0xHIDE(_0xpl)
+                                end
+                            else
+                                _0xHIDE(_0xpl)
+                            end
+                        else
+                            _0xHIDE(_0xpl)
+                        end
+                    else
+                        _0xHIDE(_0xpl)
+                    end
+                else
+                    _0xHIDE(_0xpl)
+                end
+            else
+                _0xHIDE(_0xpl)
+            end
+        end
+    end
+
+    for _0xp, _ in _0x6790(_0xDRAW) do
+        if not _0xvis[_0xp] then _0xHIDE(_0xp) end
+    end
+end
+
+local function _0xCHAMS()
+    if not _0xSTATE._h1 then
+        for _0xp, _0xh in _0x6790(_0xHL) do
+            _0xbb44(function() _0xh:Destroy() end)
+            _0xHL[_0xp] = nil
+        end
+        return
+    end
+    for _, _0xpl in _0x1248(_0xGP()) do
+        if _0xpl ~= _0x8ca5 then
+            local _0xch = _0xpl.Character
+            if _0xch then
+                local _0xh = _0xHL[_0xpl]
+                if not _0xh or not _0xh.Parent then
+                    _0xh = _0xee03("Highlight")
+                    _0xh.OutlineTransparency = 0
+                    _0xh.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+                    _0xh.Parent = _0x60b2
+                    _0xHL[_0xpl] = _0xh
+                end
+                local _0xcl = _0xCOLORS[_0xROLE(_0xpl)] or _0x3fa1(200, 200, 200)
+                _0xbb44(function()
+                    _0xh.Adornee = _0xch
+                    _0xh.FillColor = _0xcl
+                    _0xh.OutlineColor = _0xcl
+                    _0xh.FillTransparency = _0xSTATE._hc
+                end)
+            end
+        end
+    end
+    for _0xp, _0xh in _0x6790(_0xHL) do
+        if not _0xp.Parent then
+            _0xbb44(function() _0xh:Destroy() end)
+            _0xHL[_0xp] = nil
+        end
+    end
+end
+
+_0xC.gunbb = nil
+local function _0xGUN_ESP()
+    if _0xC.gunbb then
+        _0xbb44(function() _0xC.gunbb:Destroy() end)
+        _0xC.gunbb = nil
+    end
+    if not _0xSTATE._h3 then return end
+    local _0xtg = _0x91af:FindFirstChild("GunDrop") or _0x91af:FindFirstChild("Gun")
+    if not _0xtg then
+        for _, _0xd in _0x1248(_0x91af:GetDescendants()) do
+            if _0xd:IsA("Tool") and _0xd.Name == "Gun" and not _0xd.Parent:IsA("Backpack") and not _0xd.Parent:IsA("Model") then
+                _0xtg = _0xd:FindFirstChild("Handle") or _0xd
+                break
+            end
+        end
+    end
+    if _0xtg then
+        local _0xbb = _0xee03("BillboardGui")
+        _0xbb.Name = "GunESPBB"
+        _0xbb.Size = UDim2.fromOffset(100, 24)
+        _0xbb.StudsOffsetWorldSpace = _0x7ce2(0, 2, 0)
+        _0xbb.AlwaysOnTop = true
+        _0xbb.Adornee = _0xtg
+        local _0xlb = _0xee03("TextLabel")
+        _0xlb.Size = UDim2.fromScale(1, 1)
+        _0xlb.BackgroundTransparency = 1
+        _0xlb.Text = "GUN"
+        _0xlb.TextColor3 = _0x3fa1(80, 150, 255)
+        _0xlb.TextStrokeTransparency = 0.5
+        _0xlb.Font = Enum.Font.GothamBold
+        _0xlb.TextSize = 14
+        _0xlb.Parent = _0xbb
+        _0xbb.Parent = _0x8ca5:FindFirstChildOfClass("PlayerGui") or _0x60b2
+        _0xC.gunbb = _0xbb
+    end
+end
+
+local function _0xTP_ROLE(_0xrn)
+    local _0xmc = _0x8ca5.Character
+    local _0xmr = _0xmc and _0xFC(_0xmc, "HumanoidRootPart")
+    if not _0xmr then return end
+    for _, _0xpl in _0x1248(_0xGP()) do
+        if _0xpl ~= _0x8ca5 then
+            local _0xrl = _0xROLE(_0xpl)
+            if _0xrl == _0xrn then
+                local _0xch = _0xpl.Character
+                local _0xrt = _0xch and _0xFC(_0xch, "HumanoidRootPart")
+                if _0xrt then
+                    _0xmr.CFrame = _0xrt.CFrame * _0x4b58(0, 0, -5)
+                    return
+                end
+            end
+        end
+    end
+end
+
+local function _0xTP_GUN()
+    local _0xmc = _0x8ca5.Character
+    local _0xmr = _0xmc and _0xFC(_0xmc, "HumanoidRootPart")
+    if not _0xmr then return end
+    for _, _0xd in _0x1248(_0x91af:GetDescendants()) do
+        if _0xd:IsA("Tool") and _0xd.Name == "Gun" and not _0xd.Parent:IsA("Backpack") and not _0xd.Parent:IsA("Model") then
+            local _0xh = _0xd:FindFirstChild("Handle")
+            if _0xh then
+                _0xmr.CFrame = _0xh.CFrame
+                return
+            end
+        end
+    end
+    local _0xdr = _0x91af:FindFirstChild("GunDrop")
+    if _0xdr then _0xmr.CFrame = _0xdr.CFrame end
+end
+
+local _0xFARM = {
+    _bv = nil, _bg = nil, _root = nil, _hum = nil,
+    _coin = nil, _at = 0, _last = nil, _stuck = 0,
+    _pend = {}, _skip = {}, _cache = {}, _cacheAt = 0,
+    _coll = {}, _collConn = nil, _clipN = 0,
+    _run = false, _cleanAt = 0, _gunAt = 0, _gunPart = nil,
+    _stats = {collected = 0, skipped = 0, start = 0, status = "Idle", dist = 0, left = 0},
+    _uiAt = 0
+}
+
+local function _0xFARM_CLOCK(_0xsec)
+    return _0xc9d1("%02d:%02d", _0x11bf(_0xsec / 60), _0x11bf(_0xsec % 60))
+end
+
+local function _0xFARM_UI(_0xforce)
+    local _0xnow = os.clock()
+    if not _0xforce and _0xnow - _0xFARM._uiAt < 0.2 then return end
+    _0xFARM._uiAt = _0xnow
+    local _0xst = _0xFARM._stats
+    local _0xel = _0xst.start > 0 and (_0xnow - _0xst.start) or 0
+    local _0xrate = _0xel > 2 and (_0xst.collected / (_0xel / 60)) or 0
+    if _0xFARM_LBL.st then _0xFARM_LBL.st:SetText("Status: " .. _0xst.status) end
+    if _0xFARM_LBL.co then _0xFARM_LBL.co:SetText("Collected: " .. _0xst.collected) end
+    if _0xFARM_LBL.ra then _0xFARM_LBL.ra:SetText(_0xc9d1("Rate: %.1f / min", _0xrate)) end
+    if _0xFARM_LBL.el then _0xFARM_LBL.el:SetText("Elapsed: " .. _0xFARM_CLOCK(_0xel)) end
+    if _0xFARM_LBL.lf then _0xFARM_LBL.lf:SetText("Coins Left: " .. _0xst.left) end
+    if _0xFARM_LBL.di then _0xFARM_LBL.di:SetText(_0xc9d1("Distance: %d studs", _0xst.dist)) end
+    if _0xFARM_LBL.sk then _0xFARM_LBL.sk:SetText("Skipped: " .. _0xst.skipped) end
+end
+
+local function _0xCOIN_LIST()
+    local _0xnow = os.clock()
+    if _0xnow - _0xFARM._cacheAt < 0.4 and #_0xFARM._cache > 0 then
+        return _0xFARM._cache
+    end
+    _0xFARM._cacheAt = _0xnow
+    local _0xt, _0xseen, _0xids = {}, {}, {}
+    local function _0xadd(_0xcn)
+        if not _0xcn then return end
+        local _0xpt = _0xcn
+        if not _0xcn:IsA("BasePart") then _0xpt = _0xFCL(_0xcn, "BasePart") end
+        if not _0xpt or _0xseen[_0xpt] then return end
+        if not _0xpt:FindFirstChild("TouchInterest") then return end
+        if _0xpt:GetAttribute("Collected") then return end
+        local _0xid = _0xpt:GetAttribute("CoinID")
+        if _0xid ~= nil then
+            if _0xids[_0xid] then return end
+            _0xids[_0xid] = true
+        end
+        _0xseen[_0xpt] = true
+        _0x4401(_0xt, _0xpt)
+    end
+    for _, _0xroot in _0x1248(_0x91af:GetDescendants()) do
+        if _0xroot.Name == "CoinContainer" or _0xroot.Name == "Coins" then
+            for _, _0xcn in _0x1248(_0xroot:GetChildren()) do _0xadd(_0xcn) end
+        end
+    end
+    for _, _0xcn in _0x1248(_0x4c1d:GetTagged("ServerCoinPart")) do
+        if _0xcn:IsDescendantOf(_0x91af) then _0xadd(_0xcn) end
+    end
+    _0xFARM._cache = _0xt
+    return _0xt
+end
+
+local function _0xCOIN_OK(_0xpt, _0xnow)
+    if not _0xpt or not _0xpt.Parent or not _0xpt:IsA("BasePart") then return false end
+    if not _0xpt:FindFirstChild("TouchInterest") then return false end
+    if _0xpt:GetAttribute("Collected") then return false end
+    if (_0xFARM._pend[_0xpt] or 0) > _0xnow then return false end
+    if (_0xFARM._skip[_0xpt] or 0) > _0xnow then return false end
+    return true
+end
+
+local function _0xFARM_PARTS(_0xch)
+    local _0xt = {}
+    if not _0xch then return _0xt end
+    local _0xh = _0xFC(_0xch, "Head")
+    if _0xh then _0x4401(_0xt, _0xh) end
+    for _, _0xa in _0x1248(_0xch:GetChildren()) do
+        if _0xa:IsA("Accessory") then
+            local _0xah = _0xFC(_0xa, "Handle")
+            if _0xah then _0x4401(_0xt, _0xah) end
+        end
+    end
+    for _, _0xn in _0x1248({"UpperTorso", "Torso", "HumanoidRootPart", "LowerTorso"}) do
+        local _0xp = _0xFC(_0xch, _0xn)
+        if _0xp and _0xp:IsA("BasePart") then _0x4401(_0xt, _0xp) end
+    end
+    return _0xt
+end
+
+local function _0xFARM_TOUCH(_0xch, _0xpt)
+    if type(firetouchinterest) ~= "function" then return end
+    if not _0xch or not _0xpt or not _0xpt.Parent then return end
+    for _, _0xp in _0x1248(_0xFARM_PARTS(_0xch)) do
+        _0xbb44(function()
+            firetouchinterest(_0xp, _0xpt, 0)
+            firetouchinterest(_0xp, _0xpt, 1)
+        end)
+    end
+end
+
+local function _0xFARM_STOP()
+    if _0xFARM._bv then _0xbb44(function() _0xFARM._bv:Destroy() end) _0xFARM._bv = nil end
+    if _0xFARM._bg then _0xbb44(function() _0xFARM._bg:Destroy() end) _0xFARM._bg = nil end
+    local _0xhm = _0xFARM._hum
+    if _0xhm then
+        _0xbb44(function()
+            _0xhm.PlatformStand = false
+            if _0xhm.Health > 0 then _0xhm:ChangeState(Enum.HumanoidStateType.GettingUp) end
+        end)
+    end
+    _0xFARM._root = nil
+    _0xFARM._hum = nil
+    _0xFARM._coin = nil
+    _0xFARM._at = 0
+    _0xFARM._last = nil
+    _0xFARM._stuck = 0
+end
+
+local function _0xFARM_PHYS()
+    local _0xch = _0x8ca5.Character
+    if not _0xch then return nil end
+    local _0xmr = _0xFC(_0xch, "HumanoidRootPart")
+    local _0xhm = _0xGH(_0xch)
+    if not _0xmr or not _0xhm or _0xhm.Health <= 0 then return nil end
+    if _0xFARM._root ~= _0xmr then
+        _0xFARM_STOP()
+        _0xFARM._root = _0xmr
+        _0xFARM._hum = _0xhm
+        local _0xbv = _0xee03("BodyVelocity")
+        _0xbv.Name = "FlamingoFarmBV"
+        _0xbv.MaxForce = _0x7ce2(9000000000, 9000000000, 9000000000)
+        _0xbv.P = 30000
+        _0xbv.Velocity = _0x7ce2(0, 0, 0)
+        _0xbv.Parent = _0xmr
+        _0xFARM._bv = _0xbv
+        local _0xbg = _0xee03("BodyGyro")
+        _0xbg.Name = "FlamingoFarmBG"
+        _0xbg.MaxTorque = _0x7ce2(9000000000, 9000000000, 9000000000)
+        _0xbg.P = 30000
+        _0xbg.CFrame = _0xmr.CFrame
+        _0xbg.Parent = _0xmr
+        _0xFARM._bg = _0xbg
+    end
+    _0xhm.PlatformStand = true
+    return _0xmr, _0xhm
+end
+
+local function _0xFARM_CLIP(_0xon)
+    if _0xon then
+        _0xFARM._clipN = _0xFARM._clipN + 1
+        if _0xFARM._clipN > 1 then return end
+        _0xFARM._coll = {}
+        _0xFARM._collConn = _0x55c0.Stepped:Connect(function()
+            local _0xch = _0x8ca5.Character
+            if not _0xch then return end
+            for _, _0xp in _0x1248(_0xch:GetDescendants()) do
+                if _0xp:IsA("BasePart") and _0xp.CanCollide then
+                    _0xFARM._coll[_0xp] = true
+                    _0xp.CanCollide = false
+                end
+            end
+        end)
+    else
+        if _0xFARM._clipN > 0 then _0xFARM._clipN = _0xFARM._clipN - 1 end
+        if _0xFARM._clipN > 0 then return end
+        if _0xFARM._collConn then _0xFARM._collConn:Disconnect() _0xFARM._collConn = nil end
+        if not _0xSTATE._g4 then
+            for _0xp in _0x6790(_0xFARM._coll) do
+                if _0xp.Parent then _0xbb44(function() _0xp.CanCollide = true end) end
+            end
+        end
+        _0xFARM._coll = {}
+    end
+end
+
+local function _0xFARM_CLIP_OFF()
+    _0xFARM._clipN = 0
+    if _0xFARM._collConn then _0xFARM._collConn:Disconnect() _0xFARM._collConn = nil end
+    if not _0xSTATE._g4 then
+        for _0xp in _0x6790(_0xFARM._coll) do
+            if _0xp.Parent then _0xbb44(function() _0xp.CanCollide = true end) end
+        end
+    end
+    _0xFARM._coll = {}
+end
+
+local function _0xFARM_GO(_0xmr, _0xt, _0xspd, _0xdt)
+    if not _0xFARM._bv or not _0xmr or not _0xt then return 0 end
+    local _0xdp = _0xt - _0xmr.Position
+    local _0xdist = _0xdp.Magnitude
+    if _0xdist < 0.05 then
+        _0xFARM._bv.Velocity = _0x7ce2(0, 0, 0)
+    else
+        _0xFARM._bv.Velocity = _0xdp.Unit * math.min(_0xspd, _0xdist / math.max(_0xdt, 0.008))
+    end
+    local _0xflat = _0x7ce2(_0xdp.X, 0, _0xdp.Z)
+    if _0xFARM._bg and _0xflat.Magnitude > 0.4 then
+        _0xFARM._bg.CFrame = _0x4b58(_0xmr.Position, _0xmr.Position + _0xflat.Unit)
+    end
+    return _0xdist
+end
+
+local function _0xFARM_GUN(_0xmr)
+    if not _0xmr then return nil end
+    local _0xnow = os.clock()
+    if _0xnow - _0xFARM._gunAt < 0.5 then
+        if _0xFARM._gunPart and _0xFARM._gunPart.Parent and (_0xFARM._gunPart.Position - _0xmr.Position).Magnitude <= 200 then
+            if (_0xFARM._skip[_0xFARM._gunPart] or 0) <= _0xnow then
+                return _0xFARM._gunPart
+            end
+        end
+        return nil
+    end
+    local _0xbest, _0xbestD
+    local function _0xscan(_0xd)
+        if _0xd:IsA("Tool") and _0xd.Name == "Gun" then
+            local _0xp = _0xd.Parent
+            if _0xp and not _0xp:IsA("Backpack") and not (_0xp:IsA("Model") and _0xp:FindFirstChildOfClass("Humanoid")) then
+                local _0xpt = _0xd:FindFirstChild("Handle") or _0xd:FindFirstChildWhichIsA("BasePart")
+                if _0xpt and _0xpt:IsA("BasePart") then
+                    local _0xds = (_0xpt.Position - _0xmr.Position).Magnitude
+                    if _0xds <= 200 and (_0xFARM._skip[_0xpt] or 0) <= _0xnow and (not _0xbestD or _0xds < _0xbestD) then
+                        _0xbest, _0xbestD = _0xpt, _0xds
+                    end
+                end
+            end
+        end
+    end
+    for _, _0xd in _0x1248(_0x91af:GetDescendants()) do _0xscan(_0xd) end
+    local _0xdr = _0x91af:FindFirstChild("GunDrop")
+    if _0xdr then
+        local _0xpt = _0xdr:IsA("BasePart") and _0xdr or (_0xdr:FindFirstChild("Handle") or _0xdr:FindFirstChildWhichIsA("BasePart"))
+        if _0xpt and _0xpt:IsA("BasePart") then
+            local _0xds = (_0xpt.Position - _0xmr.Position).Magnitude
+            if _0xds <= 200 and (_0xFARM._skip[_0xpt] or 0) <= _0xnow and (not _0xbestD or _0xds < _0xbestD) then _0xbest, _0xbestD = _0xpt, _0xds end
+        end
+    end
+    _0xFARM._gunAt = _0xnow
+    _0xFARM._gunPart = _0xbest
+    return _0xbest
+end
+
+local function _0xFARM_CLEAN(_0xnow)
+    if _0xnow - _0xFARM._cleanAt < 20 then return end
+    _0xFARM._cleanAt = _0xnow
+    for _0xk, _0xv in _0x6790(_0xFARM._pend) do
+        if _0xv < _0xnow or not _0xk.Parent then _0xFARM._pend[_0xk] = nil end
+    end
+    for _0xk, _0xv in _0x6790(_0xFARM._skip) do
+        if _0xv < _0xnow or not _0xk.Parent then _0xFARM._skip[_0xk] = nil end
+    end
+end
+
+local function _0xCOIN_TP()
+    local _0xt = _0xTGLS and _0xTGLS["farm_coins"]
+    if _0xt then _0xt:SetValue(true) end
+end
+
+local function _0xFARM_COINS(_0xon)
+    if not _0xon then
+        _0xFARM_STOP()
+        _0xFARM._stats.start = 0
+        _0xFARM._stats.status = "Idle"
+        _0xFARM._stats.dist = 0
+        _0xFARM_UI(true)
+        return
+    end
+    if _0xFARM._run then return end
+    if _0xSTATE._g5 then
+        local _0xfl = _0xTGLS and _0xTGLS["fly_on"]
+        if _0xfl then _0xfl:SetValue(false) end
+    end
+    _0xFARM._run = true
+    _0xFARM_CLIP(true)
+    if _0xFARM._stats.start == 0 then
+        _0xFARM._stats.start = os.clock()
+        _0xFARM._stats.collected = 0
+        _0xFARM._stats.skipped = 0
+    end
+    _0xFARM._stats.status = "Searching"
+    _0xFARM_UI(true)
+    _0x39fd(function()
+        while _0xSTATE._f1 do
+            local _0xmr, _0xhm = _0xFARM_PHYS()
+            if not _0xmr then
+                _0xFARM._stats.status = "Waiting for character"
+                _0xFARM_UI(true)
+                _0xFARM_STOP()
+                _0xabc0(0.4)
+            else
+                local _0xnow = os.clock()
+                _0xFARM_CLEAN(_0xnow)
+                local _0xtgt, _0xisgun = nil, false
+                if _0xSTATE._a1 then
+                    _0xtgt = _0xFARM_GUN(_0xmr)
+                    _0xisgun = _0xtgt ~= nil
+                end
+                local _0xavail = 0
+                if not _0xtgt then
+                    local _0xbest = nil
+                    for _, _0xpt in _0x1248(_0xCOIN_LIST()) do
+                        if _0xCOIN_OK(_0xpt, _0xnow) then
+                            _0xavail = _0xavail + 1
+                            local _0xds = (_0xpt.Position - _0xmr.Position).Magnitude
+                            if not _0xbest or _0xds < _0xbest then _0xbest = _0xds _0xtgt = _0xpt end
+                        end
+                    end
+                end
+                _0xFARM._stats.left = _0xavail
+                if not _0xtgt then
+                    if _0xFARM._bv then _0xFARM._bv.Velocity = _0x7ce2(0, 0, 0) end
+                    _0xFARM._stats.status = "No coins found"
+                    _0xFARM._stats.dist = 0
+                    _0xFARM_UI()
+                    _0xabc0(0.35)
+                else
+                    if _0xtgt ~= _0xFARM._coin then
+                        _0xFARM._coin = _0xtgt
+                        _0xFARM._at = _0xnow
+                        _0xFARM._last = nil
+                        _0xFARM._stuck = 0
+                    end
+                    local _0xgoal = _0xtgt.Position + _0x7ce2(0, 2, 0)
+                    local _0xdt = _0x55c0.Heartbeat:Wait()
+                    local _0xdist = _0xFARM_GO(_0xmr, _0xgoal, _0xSTATE._f3, _0xdt)
+                    if not _0xSTATE._f1 then break end
+                    _0xFARM._stats.dist = _0xdist
+                    _0xFARM._stats.status = _0xisgun and "Moving to gun" or "Moving to coin"
+                    _0xFARM_UI()
+                    if _0xdist <= 4 then
+                        _0xFARM._stats.status = "Collecting"
+                        _0xFARM_UI(true)
+                        if _0xFARM._bv then _0xFARM._bv.Velocity = _0x7ce2(0, 0, 0) end
+                        local _0xwait = _0xc746(tonumber(_0xSTATE._f2) or 1, 0.3, 3)
+                        if _0xisgun then _0xwait = math.min(_0xwait, 0.5) end
+                        local _0xend = os.clock() + _0xwait
+                        while os.clock() < _0xend and _0xSTATE._f1 do
+                            _0xFARM_TOUCH(_0xhm.Parent, _0xtgt)
+                            local _0xdt2 = _0x55c0.Heartbeat:Wait()
+                            if not _0xtgt.Parent then break end
+                            _0xFARM_GO(_0xmr, _0xgoal, 0, _0xdt2)
+                        end
+                        if _0xisgun then
+                            if _0xtgt.Parent then _0xFARM._skip[_0xtgt] = os.clock() + 5 end
+                        else
+                            _0xFARM._pend[_0xtgt] = os.clock() + 1.2
+                        end
+                        _0xFARM._coin = nil
+                        _0xFARM._stats.collected = _0xFARM._stats.collected + 1
+                        _0xFARM_UI(true)
+                    else
+                        local _0xmv = 0
+                        if _0xFARM._last then _0xmv = (_0xmr.Position - _0xFARM._last).Magnitude end
+                        _0xFARM._last = _0xmr.Position
+                        if _0xmv < math.max(0.02, _0xSTATE._f3 * _0xdt * 0.25) then
+                            _0xFARM._stuck = _0xFARM._stuck + _0xdt
+                        else
+                            _0xFARM._stuck = 0
+                        end
+                        if _0xFARM._stuck > 2.5 then
+                            _0xFARM._skip[_0xtgt] = _0xnow + 30
+                            _0xFARM._coin = nil
+                            _0xFARM._last = nil
+                            _0xFARM._stuck = 0
+                            _0xFARM._stats.skipped = _0xFARM._stats.skipped + 1
+                            _0xFARM._stats.status = "Stuck, skipping"
+                            _0xFARM_UI(true)
+                        end
+                    end
+                end
+            end
+        end
+        _0xFARM_STOP()
+        _0xFARM_CLIP(false)
+        _0xFARM._run = false
+        if _0xSTATE._f1 then _0xFARM_COINS(true) end
+    end)
+end
+
+_0xC.nc = nil
+local function _0xNCLIP(_0xon)
+    if _0xC.nc then _0xC.nc:Disconnect() _0xC.nc = nil end
+    if not _0xon then return end
+    _0xC.nc = _0x55c0.Stepped:Connect(function()
+        local _0xch = _0x8ca5.Character
+        if not _0xch then return end
+        for _, _0xpt in _0x1248(_0xch:GetDescendants()) do
+            if _0xpt:IsA("BasePart") then _0xpt.CanCollide = false end
+        end
+    end)
+end
+
+_0xC.spd = nil
+local function _0xSPD()
+    if _0xC.spd then _0xC.spd:Disconnect() _0xC.spd = nil end
+    if not _0xSTATE._g1 then
+        _0xbb44(function()
+            local _0xch = _0x8ca5.Character
+            local _0xhm = _0xch and _0xGH(_0xch)
+            if _0xhm then _0xhm.WalkSpeed = 16 end
+        end)
+        return
+    end
+    _0xC.spd = _0x55c0.Heartbeat:Connect(function()
+        local _0xch = _0x8ca5.Character
+        local _0xhm = _0xch and _0xGH(_0xch)
+        if _0xhm then _0xhm.WalkSpeed = _0xSTATE._g7 end
+    end)
+end
+
+_0xC.jmp = nil
+local function _0xJMP()
+    if _0xC.jmp then _0xC.jmp:Disconnect() _0xC.jmp = nil end
+    if not _0xSTATE._g2 then
+        _0xbb44(function()
+            local _0xch = _0x8ca5.Character
+            local _0xhm = _0xch and _0xGH(_0xch)
+            if _0xhm then _0xhm.JumpPower = 50 end
+        end)
+        return
+    end
+    _0xC.jmp = _0x55c0.Heartbeat:Connect(function()
+        local _0xch = _0x8ca5.Character
+        local _0xhm = _0xch and _0xGH(_0xch)
+        if _0xhm then _0xhm.JumpPower = _0xSTATE._g8 end
+    end)
+end
+
+_0xC.infj = nil
+local function _0xINFJ()
+    if _0xC.infj then _0xC.infj:Disconnect() _0xC.infj = nil end
+    if not _0xSTATE._g3 then return end
+    _0xC.infj = _0x3e7d.JumpRequest:Connect(function()
+        local _0xch = _0x8ca5.Character
+        local _0xhm = _0xch and _0xGH(_0xch)
+        if _0xhm then _0xhm:ChangeState(Enum.HumanoidStateType.Jumping) end
+    end)
+end
+
+_0xC.flybv, _0xC.flybg, _0xC.fly = nil, nil, nil
+local function _0xFLY(_0xon)
+    if _0xC.fly then _0xC.fly:Disconnect() _0xC.fly = nil end
+    if _0xC.flybv then _0xbb44(function() _0xC.flybv:Destroy() end) _0xC.flybv = nil end
+    if _0xC.flybg then _0xbb44(function() _0xC.flybg:Destroy() end) _0xC.flybg = nil end
+    if not _0xon then return end
+    if _0xSTATE._f1 then
+        local _0xfc = _0xTGLS and _0xTGLS["farm_coins"]
+        if _0xfc then _0xfc:SetValue(false) end
+    end
+    local _0xch = _0x8ca5.Character
+    local _0xrt = _0xch and _0xFC(_0xch, "HumanoidRootPart")
+    if not _0xrt then return end
+    _0xC.flybv = _0xee03("BodyVelocity")
+    _0xC.flybv.MaxForce = _0x7ce2(1e5, 1e5, 1e5)
+    _0xC.flybv.Velocity = _0x7ce2(0, 0, 0)
+    _0xC.flybv.Parent = _0xrt
+    _0xC.flybg = _0xee03("BodyGyro")
+    _0xC.flybg.MaxTorque = _0x7ce2(1e5, 1e5, 1e5)
+    _0xC.flybg.P = 9e4
+    _0xC.flybg.Parent = _0xrt
+    local _0xsp = _0xSTATE._g9 > 0 and _0xSTATE._g9 or 60
+    _0xC.fly = _0x55c0.Heartbeat:Connect(function()
+        local _0xcf = _0x47e3.CFrame
+        local _0xdr = _0x7ce2(0, 0, 0)
+        if _0x3e7d:IsKeyDown(Enum.KeyCode.W) then _0xdr = _0xdr + _0xcf.LookVector end
+        if _0x3e7d:IsKeyDown(Enum.KeyCode.S) then _0xdr = _0xdr - _0xcf.LookVector end
+        if _0x3e7d:IsKeyDown(Enum.KeyCode.A) then _0xdr = _0xdr - _0xcf.RightVector end
+        if _0x3e7d:IsKeyDown(Enum.KeyCode.D) then _0xdr = _0xdr + _0xcf.RightVector end
+        if _0x3e7d:IsKeyDown(Enum.KeyCode.Space) then _0xdr = _0xdr + _0x7ce2(0, 1, 0) end
+        if _0x3e7d:IsKeyDown(Enum.KeyCode.LeftShift) then _0xdr = _0xdr - _0x7ce2(0, 1, 0) end
+        if _0xdr.Magnitude > 0 then
+            _0xC.flybv.Velocity = _0xdr.Unit * _0xsp
+        else
+            _0xC.flybv.Velocity = _0x7ce2(0, 0, 0)
+        end
+        _0xC.flybg.CFrame = _0xcf
+    end)
+end
+
+_0xC.wh = nil
+local function _0xWALLHOP(_0xon)
+    if _0xC.wh then _0xC.wh:Disconnect() _0xC.wh = nil end
+    if not _0xon then return end
+    local _0xch = _0x8ca5.Character
+    local _0xhm = _0xch and _0xGH(_0xch)
+    local _0xmr = _0xch and _0xFC(_0xch, "HumanoidRootPart")
+    if not _0xmr or not _0xhm then return end
+    _0xC.wh = _0x55c0.Heartbeat:Connect(function(_0xdt)
+        if not _0xSTATE._wf then return end
+        if not _0xmr.Parent then return end
+        local _0xangle = math.rad(tonumber(_0xSTATE._wfa) or 90)
+        local _0xdir = _0xmr.CFrame.LookVector
+        local _0xfwd = CFrame.Angles(0, _0xangle, 0) * _0x7ce2(_0xdir.X, 0, _0xdir.Z)
+        _0xmr.CFrame = _0xmr.CFrame + _0xfwd.Unit * 1 * _0xdt
+    end)
+end
+
+_0xC.afk = nil
+local function _0xAFK(_0xon)
+    if _0xC.afk then _0xC.afk:Disconnect() _0xC.afk = nil end
+    if not _0xon then return end
+    _0xC.afk = _0x8ca5.Idled:Connect(function()
+        local _0xvu = game:GetService("VirtualUser")
+        _0xvu:CaptureController()
+        _0xvu:ClickButton2(Vector2.new())
+    end)
+end
+
+local function _0xFBRIGHT(_0xon)
+    if _0xon then
+        _0xa4e6.Ambient = _0x3fa1(255, 255, 255)
+        _0xa4e6.Brightness = 2
+        _0xa4e6.FogEnd = 1e6
+        _0xa4e6.GlobalShadows = false
+    else
+        _0xa4e6.Ambient = _0x3fa1(127, 127, 127)
+        _0xa4e6.Brightness = 1
+        _0xa4e6.FogEnd = 1e4
+        _0xa4e6.GlobalShadows = true
+    end
+end
+
+_0xC.fovc = nil
+local function _0xFOV_DRAW()
+    if not _0xC.fovc then
+        _0xC.fovc = Drawing.new("Circle")
+        _0xC.fovc.Thickness = 1
+        _0xC.fovc.NumSides = 60
+        _0xC.fovc.Filled = false
+        _0xC.fovc.Transparency = 0.6
+        _0xC.fovc.Color = _0x3fa1(255, 255, 255)
+    end
+    _0xC.fovc.Radius = _0xSTATE._h6
+    _0xC.fovc.Visible = _0xSTATE._h5
+    _0xC.fovc.Position = _0x3e7d:GetMouseLocation()
+end
+
+_0xC.afovc = nil
+local function _0xAFOV_DRAW()
+    if not _0xC.afovc then
+        _0xC.afovc = Drawing.new("Circle")
+        _0xC.afovc.Thickness = 1
+        _0xC.afovc.NumSides = 60
+        _0xC.afovc.Filled = false
+        _0xC.afovc.Transparency = 0.5
+        _0xC.afovc.Color = _0x3fa1(255, 120, 60)
+    end
+    _0xC.afovc.Radius = _0xSTATE._h10
+    _0xC.afovc.Visible = _0xSTATE._h11
+    _0xC.afovc.Position = _0x3e7d:GetMouseLocation()
+end
+
+local function _0xSILENT()
+    if not _0xSTATE._h4 then return nil end
+    if not _0xKEY("saim_key") then return nil end
+    if _0xd200(1, 100) > _0xSTATE._h7 then return nil end
+    local _0xms = _0x3e7d:GetMouseLocation()
+    local _0xcl = _0x5d9a
+    local _0xtg = nil
+    for _, _0xpl in _0x1248(_0xGP()) do
+        if _0xpl ~= _0x8ca5 and _0xpl.Character then
+            local _0xrl = _0xROLE(_0xpl)
+            if _0xrl == "Murderer" or not _0xSTATE._k1 then
+                local _0xhd = _0xpl.Character:FindFirstChild("Head")
+                if _0xhd then
+                    local _0xsp, _0xos = _0x47e3:WorldToViewportPoint(_0xhd.Position)
+                    if _0xos then
+                        local _0xd = (Vector2.new(_0xsp.X, _0xsp.Y) - _0xms).Magnitude
+                        if _0xd < _0xSTATE._h6 and _0xd < _0xcl then
+                            _0xcl = _0xd
+                            _0xtg = _0xhd
+                        end
+                    end
+                end
+            end
+        end
+    end
+    return _0xtg
+end
+
+_0xC.aim = nil
+local function _0xAIMBOT(_0xon)
+    if _0xC.aim then _0xC.aim:Disconnect() _0xC.aim = nil end
+    if not _0xon then return end
+    _0xC.aim = _0x55c0.RenderStepped:Connect(function()
+        if not _0xSTATE._h8 then return end
+        if not _0xKEY("aimbot_key") then return end
+        local _0xms = _0x3e7d:GetMouseLocation()
+        local _0xcl = _0x5d9a
+        local _0xtg = nil
+        for _, _0xpl in _0x1248(_0xGP()) do
+            if _0xpl ~= _0x8ca5 and _0xpl.Character then
+                local _0xrl = _0xROLE(_0xpl)
+                if _0xrl == "Murderer" or not _0xSTATE._k1 then
+                    local _0xhd = _0xpl.Character:FindFirstChild("Head")
+                    if _0xhd then
+                        local _0xsp, _0xos = _0x47e3:WorldToViewportPoint(_0xhd.Position)
+                        if _0xos then
+                            local _0xd = (Vector2.new(_0xsp.X, _0xsp.Y) - _0xms).Magnitude
+                            if _0xd < _0xSTATE._h10 and _0xd < _0xcl then
+                                _0xcl = _0xd
+                                _0xtg = _0xhd
+                            end
+                        end
+                    end
+                end
+            end
+        end
+        if _0xtg and _0x3e7d:IsMouseButtonPressed(Enum.UserInputType.MouseButton2) then
+            local _0xgoal = _0x4b58(_0x47e3.CFrame.Position, _0xtg.Position)
+            _0x47e3.CFrame = _0x47e3.CFrame:Lerp(_0xgoal, _0xSTATE._ha)
+        end
+    end)
+end
+
+local _0xHL_ORIG: {[any]: any} = {}
+local function _0xFAKE_HEADLESS(_0xon)
+    local _0xch = _0x8ca5.Character
+    if not _0xch then return end
+    local _0xhd = _0xch:FindFirstChild("Head")
+    if not _0xhd then return end
+    if _0xon then
+        if _0xHL_ORIG._on then return end
+        _0xHL_ORIG._on = true
+        _0xHL_ORIG._t = _0xhd.Transparency
+        _0xhd.Transparency = 1
+        local _0xfc = _0xhd:FindFirstChildOfClass("Decal")
+        if _0xfc then _0xHL_ORIG._face = _0xfc; _0xfc.Transparency = 1 end
+        for _, _0xac in _0x1248(_0xhd:GetChildren()) do
+            if _0xac:IsA("Accessory") or _0xac:IsA("Hat") then
+                local _0xh = _0xac:FindFirstChild("Handle")
+                if _0xh then _0xh.Transparency = 1 end
+            end
+        end
+        for _, _0xac in _0x1248(_0xch:GetChildren()) do
+            if _0xac:IsA("Accessory") then
+                local _0xh = _0xac:FindFirstChild("Handle")
+                if _0xh then
+                    local _0xat = _0xh:FindFirstChildOfClass("Attachment")
+                    if _0xat and _0xat.Name:find("Hat") then
+                        _0xh.Transparency = 1
+                    end
+                end
+            end
+        end
+    else
+        _0xhd.Transparency = _0xHL_ORIG._t or 0
+        if _0xHL_ORIG._face then _0xHL_ORIG._face.Transparency = 0 end
+        for _, _0xac in _0x1248(_0xch:GetChildren()) do
+            if _0xac:IsA("Accessory") then
+                local _0xh = _0xac:FindFirstChild("Handle")
+                if _0xh then _0xh.Transparency = 0 end
+            end
+        end
+        _0xHL_ORIG = {}
+    end
+end
+
+_0xC.animtrack = nil
+_0xC.animconn = nil
+_0xC.animcur = nil
+local _0xANIM_IDS = {
+    ["Zombie"] = "rbxassetid://616163682",
+    ["Ninja"] = "rbxassetid://656118852",
+    ["Werewolf"] = "rbxassetid://1083216690",
+    ["Levitate"] = "rbxassetid://616006778",
+    ["Floss"] = "rbxassetid://507771019",
+}
+
+local function _0xPLAY_ANIM(_0xid)
+    local _0xch = _0x8ca5.Character
+    local _0xhm = _0xch and _0xGH(_0xch)
+    local _0xan = _0xch and _0xFC(_0xch, "Animate")
+    if _0xan and not _0xan:IsA("LocalScript") then _0xan = nil end
+    local _0xplay = _0xid and _0xid ~= ""
+    _0xC.animcur = _0xplay and _0xid or nil
+    if _0xC.animconn then _0xC.animconn:Disconnect() _0xC.animconn = nil end
+    if _0xC.animtrack then
+        _0xbb44(function()
+            _0xC.animtrack:Stop()
+            _0xC.animtrack:Destroy()
+        end)
+        _0xC.animtrack = nil
+    end
+    if _0xplay and _0xan then _0xan.Disabled = true end
+    if _0xhm then
+        _0xbb44(function()
+            for _, _0xat in _0x1248(_0xhm:GetPlayingAnimationTracks()) do
+                _0xat:Stop(0)
+            end
+        end)
+    end
+    if not _0xplay then
+        if _0xan then _0xan.Disabled = false end
+        return
+    end
+    if not _0xhm then return end
+    _0xbb44(function()
+        local _0xanim = _0xee03("Animation")
+        _0xanim.AnimationId = _0xid
+        _0xC.animtrack = _0xhm:LoadAnimation(_0xanim)
+        _0xC.animtrack.Priority = Enum.AnimationPriority.Action4
+        _0xC.animtrack.Looped = true
+        _0xC.animtrack:Play()
+        local _0xatr = _0xhm:FindFirstChildOfClass("Animator")
+        if _0xatr then
+            _0xC.animconn = _0xatr.AnimationPlayed:Connect(function(_0xtrack)
+                if _0xC.animtrack and _0xC.animtrack.IsPlaying and _0xtrack ~= _0xC.animtrack then
+                    _0xbb44(function() _0xtrack:Stop(0) end)
+                end
+            end)
+        end
+    end)
+end
+
+_0xC.ka = nil
+local function _0xKNIFE_AURA(_0xon)
+    if _0xC.ka then _0xC.ka:Disconnect() _0xC.ka = nil end
+    if not _0xon then return end
+    _0xC.ka = _0x55c0.Heartbeat:Connect(function()
+        local _0xch = _0x8ca5.Character
+        if not _0xch then return end
+        local _0xkn = _0xFC(_0xch, "Knife") or (_0x8ca5:FindFirstChild("Backpack") and _0xFC(_0x8ca5.Backpack, "Knife"))
+        if not _0xkn then return end
+        local _0xmr = _0xFC(_0xch, "HumanoidRootPart")
+        if not _0xmr then return end
+        for _, _0xpl in _0x1248(_0xGP()) do
+            if _0xpl ~= _0x8ca5 and _0xpl.Character then
+                local _0xps = _0xRP(_0xpl.Character)
+                if _0xps and (_0xmr.Position - _0xps).Magnitude < _0xSTATE._k5 * 15 then
+                    _0xbb44(function()
+                        local _0xsv = _0xkn:FindFirstChild("KnifeServer") or _0xkn:FindFirstChild("ServerControl")
+                        if _0xsv then
+                            _0xsv:InvokeServer("throw", _0x4b58(_0xps))
+                        else
+                            _0x72d4:FindFirstChild("GameEvent"):FireServer("throw", _0xkn, _0x4b58(_0xps))
+                        end
+                    end)
+                end
+            end
+        end
+    end)
+end
+
+local function _0xNOTIF(_0xtt, _0xtx, _0xdr)
+    _0xbb44(function()
+        _0xLIB:Notify({
+            Title = _0xtt or "Flamingo",
+            Description = _0xtx or "",
+            Time = _0xdr or 3
+        })
+    end)
+end
+
+
+_0xC.autoshoot = nil
+local function _0xAUTOSHOOT(_0xon)
+    if _0xC.autoshoot then _0xC.autoshoot:Disconnect() _0xC.autoshoot = nil end
+    if not _0xon then return end
+    local _0xnext = 0
+    _0xC.autoshoot = _0x55c0.Heartbeat:Connect(function()
+        if not _0xSTATE._a2 then return end
+        if not _0xKEY("autoshoot_key") then return end
+        local _0xnow = _0x8891()
+        if _0xnow < _0xnext then return end
+        _0xnext = _0xnow + 0.35
+        local _0xch = _0x8ca5.Character
+        local _0xmr = _0xch and _0xFC(_0xch, "HumanoidRootPart")
+        local _0xhm = _0xch and _0xGH(_0xch)
+        if not (_0xmr and _0xhm and _0xhm.Health > 0) then return end
+        local _0xgn = _0xFC(_0xch, "Gun")
+        if not _0xgn then
+            local _0xbp = _0x8ca5:FindFirstChild("Backpack")
+            _0xgn = _0xbp and _0xFC(_0xbp, "Gun")
+        end
+        if not _0xgn then return end
+        local _0xtg = nil
+        local _0xcl = _0x5d9a
+        for _, _0xpl in _0x1248(_0xGP()) do
+            if _0xpl ~= _0x8ca5 and _0xpl.Character and _0xROLE(_0xpl) == "Murderer" then
+                local _0xhd = _0xFC(_0xpl.Character, "Head")
+                local _0xph = _0xGH(_0xpl.Character)
+                if _0xhd and _0xph and _0xph.Health > 0 then
+                    local _0xd = (_0xmr.Position - _0xhd.Position).Magnitude
+                    if _0xd < _0xcl then
+                        local _0xlos = _0xSTATE._a3
+                        if not _0xlos then
+                            local _0xrp = RaycastParams.new()
+                            _0xrp.FilterType = Enum.RaycastFilterType.Exclude
+                            _0xrp.FilterDescendantsInstances = {_0xch, _0xpl.Character}
+                            _0xlos = _0x91af:Raycast(_0xmr.Position, _0xhd.Position - _0xmr.Position, _0xrp) == nil
+                        end
+                        if _0xlos then
+                            _0xcl = _0xd
+                            _0xtg = _0xhd
+                        end
+                    end
+                end
+            end
+        end
+        if not _0xtg then return end
+        _0xbb44(function()
+            local _0xsv = _0xgn:FindFirstChild("GunServer") or _0xgn:FindFirstChild("ServerControl")
+            if _0xsv then
+                _0xsv:InvokeServer("fire", _0xtg.Position)
+            else
+                local _0xge = _0x72d4:FindFirstChild("GameEvent")
+                if _0xge then _0xge:FireServer("fire", _0xgn, _0xtg.Position) end
+            end
+        end)
+    end)
+end
+
+_0xC.spin = nil
+local function _0xSPIN(_0xon)
+    if _0xC.spin then _0xC.spin:Disconnect() _0xC.spin = nil end
+    local _0xch = _0x8ca5.Character
+    local _0xhm = _0xch and _0xGH(_0xch)
+    if _0xhm then _0xhm.AutoRotate = not _0xon end
+    if not _0xon then return end
+    _0xC.spin = _0x55c0.RenderStepped:Connect(function()
+        if not _0xSTATE._a4 then return end
+        local _0xch = _0x8ca5.Character
+        local _0xhm = _0xch and _0xGH(_0xch)
+        local _0xmr = _0xch and _0xFC(_0xch, "HumanoidRootPart")
+        if _0xhm then _0xhm.AutoRotate = false end
+        if _0xmr then
+            _0xmr.CFrame = _0xmr.CFrame * CFrame.Angles(0, math.rad(_0xSTATE._a5 * 2), 0)
+        end
+    end)
+end
+
+_0xC.antifling = nil
+local function _0xANTIFLING(_0xon)
+    if _0xC.antifling then _0xC.antifling:Disconnect() _0xC.antifling = nil end
+    if not _0xon then return end
+    _0xC.antifling = _0x55c0.Stepped:Connect(function()
+        if not _0xSTATE._a8 then return end
+        local _0xch = _0x8ca5.Character
+        local _0xmr = _0xch and _0xFC(_0xch, "HumanoidRootPart")
+        if _0xmr and _0xmr:IsA("BasePart") then
+            local _0xvl = _0xmr.Velocity
+            if _0xvl.Magnitude > 500 then
+                _0xmr.Velocity = _0xvl.Unit * 50
+                _0xmr.RotVelocity = _0x7ce2(0, 0, 0)
+            end
+        end
+    end)
+end
+
+local function _0xGRAVITY(_0xv)
+    _0x91af.Gravity = _0xv
+end
+
+local function _0xFOV_SET(_0xv)
+    if _0x47e3 then _0x47e3.FieldOfView = _0xv end
+end
+
+_0xLIB:OnUnload(function()
+    if _0x47e3 then _0x47e3.FieldOfView = 70 end
+    _0x91af.Gravity = 196.2
+end)
+
+local function _0xPNAMES()
+    local _0xt = {}
+    for _, _0xpl in _0x1248(_0xGP()) do
+        if _0xpl ~= _0x8ca5 then
+            _0x4401(_0xt, _0xpl.Name)
+        end
+    end
+    table.sort(_0xt)
+    if #_0xt == 0 then _0xt[1] = "none" end
+    return _0xt
+end
+
+local function _0xTP_PLAYER(_0xn)
+    if not _0xn or _0xn == "" or _0xn == "none" then return end
+    local _0xt = nil
+    for _, _0xpl in _0x1248(_0xGP()) do
+        if _0xpl ~= _0x8ca5 and (_0xpl.Name == _0xn or _0xpl.DisplayName == _0xn) then
+            _0xt = _0xpl
+            break
+        end
+    end
+    if not _0xt then return end
+    local _0xch = _0x8ca5.Character
+    local _0xmr = _0xch and _0xFC(_0xch, "HumanoidRootPart")
+    local _0xpch = _0xt.Character
+    local _0xpr = _0xpch and _0xFC(_0xpch, "HumanoidRootPart")
+    if _0xmr and _0xpr then
+        _0xmr.CFrame = _0xpr.CFrame
+    end
+end
+
+local _0xTF_CD: {[any]: any} = {}
+local function _0xFLING_CHAR(_0xch, _0xforce)
+    if not _0xch or _0xch == _0x8ca5.Character then return end
+    local _0xhm = _0xGH(_0xch)
+    local _0xmr = _0xFC(_0xch, "HumanoidRootPart")
+    if not _0xhm or not _0xmr or _0xhm.Health <= 0 or not _0xmr:IsA("BasePart") then return end
+    if not _0xforce then
+        local _0xnow = _0x8891()
+        if _0xTF_CD[_0xch] and _0xTF_CD[_0xch] > _0xnow then return end
+        _0xTF_CD[_0xch] = _0xnow + 0.45
+    end
+    local _0xpw = _0xc746(tonumber(_0xSTATE._t2) or 500, 50, 5000)
+    _0xbb44(function()
+        _0xmr:SetNetworkOwner(_0x8ca5)
+    end)
+    _0xbb44(function()
+        local _0xbv = _0xee03("BodyVelocity")
+        _0xbv.MaxForce = _0x7ce2(1e9, 1e9, 1e9)
+        _0xbv.Velocity = _0x7ce2(_0xd200(-100, 100), _0xd200(30, 120), _0xd200(-100, 100)).Unit * _0xpw
+        _0xbv.Parent = _0xmr
+        local _0xbav = _0xee03("BodyAngularVelocity")
+        _0xbav.MaxTorque = _0x7ce2(1e9, 1e9, 1e9)
+        _0xbav.AngularVelocity = _0x7ce2(_0xd200(-40, 40), _0xd200(-40, 40), _0xd200(-40, 40))
+        _0xbav.Parent = _0xmr
+        _0x71ee(function()
+            _0xabc0(0.3)
+            if _0xbv and _0xbv.Parent then _0xbv:Destroy() end
+            if _0xbav and _0xbav.Parent then _0xbav:Destroy() end
+        end)
+    end)
+end
+
+local _0xTF_CONNS: {[any]: any} = {}
+local function _0xTF_CLEAR()
+    for _, _0xc in _0x1248(_0xTF_CONNS) do
+        _0xbb44(function() _0xc:Disconnect() end)
+    end
+    _0xTF_CONNS = {}
+end
+
+local function _0xTF_BUILD()
+    _0xTF_CLEAR()
+    if not _0xSTATE._t1 then return end
+    local _0xch = _0x8ca5.Character
+    if not _0xch then return end
+    for _, _0xpt in _0x1248(_0xch:GetDescendants()) do
+        if _0xpt:IsA("BasePart") then
+            _0x4401(_0xTF_CONNS, _0xpt.Touched:Connect(function(_0xht)
+                if not _0xSTATE._t1 or not _0xht then return end
+                if _0xht:IsDescendantOf(_0xch) then return end
+                local _0xmdl = _0xht:FindFirstAncestorOfClass("Model")
+                if not _0xmdl then return end
+                if _0xmdl:FindFirstChildOfClass("Humanoid") and _0xmdl:FindFirstChild("HumanoidRootPart") then
+                    _0xFLING_CHAR(_0xmdl)
+                end
+            end))
+        end
+    end
+end
+
+local function _0xTOUCH_FLING(_0xon)
+    if not _0xon then
+        _0xTF_CLEAR()
+        return
+    end
+    _0x39fd(function()
+        while _0xSTATE._t1 and not _0x8ca5.Character do _0xabc0(0.2) end
+        if _0xSTATE._t1 then _0xTF_BUILD() end
+    end)
+end
+
+_0xC.sa = nil
+local function _0xSPIN_ALL(_0xon)
+    if _0xC.sa then _0xC.sa:Disconnect() _0xC.sa = nil end
+    if not _0xon then return end
+    _0xC.sa = _0x55c0.Heartbeat:Connect(function()
+        if not _0xSTATE._tc then return end
+        for _, _0xpl in _0x1248(_0xGP()) do
+            if _0xpl ~= _0x8ca5 and _0xpl.Character then
+                local _0xmr = _0xFC(_0xpl.Character, "HumanoidRootPart")
+                if _0xmr and _0xmr:IsA("BasePart") then
+                    _0xbb44(function()
+                        _0xmr.CFrame = _0xmr.CFrame * CFrame.Angles(0, math.rad(25), 0)
+                    end)
+                end
+            end
+        end
+    end)
+end
+
+_0xC.orb = nil
+local _0xORB_A = 0
+local function _0xORBIT_TARGET()
+    local _0xmp = _0x8ca5.Character and _0xRP(_0x8ca5.Character)
+    if _0xSTATE._t6 then
+        local _0xcl = _0x5d9a
+        local _0xbest = nil
+        if not _0xmp then return nil end
+        for _, _0xpl in _0x1248(_0xGP()) do
+            if _0xpl ~= _0x8ca5 and _0xpl.Character then
+                local _0xps = _0xRP(_0xpl.Character)
+                if _0xps then
+                    local _0xd = (_0xmp - _0xps).Magnitude
+                    if _0xd < _0xcl then
+                        _0xcl = _0xd
+                        _0xbest = _0xpl
+                    end
+                end
+            end
+        end
+        return _0xbest
+    end
+    for _, _0xpl in _0x1248(_0xGP()) do
+        if _0xpl ~= _0x8ca5 and (_0xpl.Name == _0xSTATE._tb or _0xpl.DisplayName == _0xSTATE._tb) then
+            return _0xpl
+        end
+    end
+    return nil
+end
+
+local function _0xORBIT(_0xon)
+    if _0xC.orb then _0xC.orb:Disconnect() _0xC.orb = nil end
+    if not _0xon then return end
+    _0xORB_A = 0
+    _0xC.orb = _0x55c0.RenderStepped:Connect(function(_0xdt)
+        if not _0xSTATE._t3 then return end
+        local _0xpl = _0xORBIT_TARGET()
+        local _0xch = _0x8ca5.Character
+        local _0xmr = _0xch and _0xFC(_0xch, "HumanoidRootPart")
+        local _0xps = _0xpl and _0xpl.Character and _0xRP(_0xpl.Character)
+        if not _0xmr or not _0xps then return end
+        _0xORB_A = _0xORB_A + _0xdt * (tonumber(_0xSTATE._t5) or 3)
+        local _0xr = _0xc746(tonumber(_0xSTATE._t4) or 12, 3, 50)
+        local _0xpos = _0xps + _0x7ce2(math.cos(_0xORB_A) * _0xr, 4, math.sin(_0xORB_A) * _0xr)
+        _0xbb44(function()
+            _0xmr.CFrame = _0x4b58(_0xpos, _0xps)
+        end)
+    end)
+end
+
+_0xC.ntgui = nil
+local function _0xNAMETAG_BUILD()
+    if _0xC.ntgui then
+        _0xbb44(function() _0xC.ntgui:Destroy() end)
+        _0xC.ntgui = nil
+    end
+    if not _0xSTATE._t7 then return end
+    local _0xch = _0x8ca5.Character
+    local _0xhd = _0xch and _0xFC(_0xch, "Head")
+    if not _0xhd then return end
+    _0xbb44(function()
+        local _0xbb = _0xee03("BillboardGui")
+        _0xbb.Name = "FlamingoTag"
+        _0xbb.Size = UDim2.fromOffset(220, 48)
+        _0xbb.StudsOffsetWorldSpace = _0x7ce2(0, 2.6, 0)
+        _0xbb.AlwaysOnTop = true
+        _0xbb.Adornee = _0xhd
+        _0xbb.MaxDistance = 250
+        _0xbb.Parent = _0xhd
+        local _0xfr = _0xee03("Frame")
+        _0xfr.Size = UDim2.fromOffset(200, 34)
+        _0xfr.Position = UDim2.fromScale(0.5, 0.5)
+        _0xfr.AnchorPoint = Vector2.new(0.5, 0.5)
+        _0xfr.BackgroundColor3 = _0x3fa1(15, 15, 20)
+        _0xfr.BackgroundTransparency = 0.15
+        _0xfr.Parent = _0xbb
+        local _0xcr = _0xee03("UICorner")
+        _0xcr.CornerRadius = UDim.new(0, 10)
+        _0xcr.Parent = _0xfr
+        local _0xst = _0xee03("UIStroke")
+        _0xst.Thickness = 1.5
+        _0xst.Color = _0x3fa1(125, 85, 255)
+        _0xst.Transparency = 0.1
+        _0xst.Parent = _0xfr
+        local _0xgr = _0xee03("UIGradient")
+        _0xgr.Color = ColorSequence.new(_0x3fa1(255, 90, 160), _0x3fa1(125, 85, 255))
+        _0xgr.Parent = _0xst
+        local _0xlb = _0xee03("TextLabel")
+        _0xlb.Size = UDim2.fromScale(1, 1)
+        _0xlb.BackgroundTransparency = 1
+        _0xlb.Text = _0xSTATE._t8
+        _0xlb.TextColor3 = _0x3fa1(255, 255, 255)
+        _0xlb.TextScaled = true
+        _0xlb.Font = Enum.Font.GothamBold
+        _0xlb.Parent = _0xfr
+        local _0xsc = _0xee03("UITextSizeConstraint")
+        _0xsc.MaxTextSize = 18
+        _0xsc.MinTextSize = 8
+        _0xsc.Parent = _0xlb
+        _0xC.ntgui = _0xbb
+        _0x39fd(function()
+            while _0xC.ntgui == _0xbb do
+                _0xabc0(0.05)
+                if _0xgr and _0xgr.Parent then
+                    _0xgr.Rotation = (_0xgr.Rotation + 8) % 360
+                end
+            end
+        end)
+    end)
+end
+
+local function _0xNAMETAG_TEXT(_0xt)
+    _0xSTATE._t8 = _0xt or ""
+    if _0xC.ntgui then
+        _0xbb44(function()
+            local _0xfr = _0xC.ntgui:FindFirstChildOfClass("Frame")
+            local _0xlb = _0xfr and _0xfr:FindFirstChildOfClass("TextLabel")
+            if _0xlb then _0xlb.Text = _0xSTATE._t8 end
+        end)
+    end
+end
+
+_0xC.auraatt = nil
+local function _0xPARTICLE_AURA(_0xon)
+    if _0xC.auraatt then
+        _0xbb44(function() _0xC.auraatt:Destroy() end)
+        _0xC.auraatt = nil
+    end
+    if not _0xon then return end
+    local _0xch = _0x8ca5.Character
+    local _0xmr = _0xch and _0xFC(_0xch, "HumanoidRootPart")
+    if not _0xmr then return end
+    _0xbb44(function()
+        local _0xatt = _0xee03("Attachment")
+        _0xatt.Name = "FlamingoAura"
+        _0xatt.Parent = _0xmr
+        local _0xpe = _0xee03("ParticleEmitter")
+        _0xpe.Name = "FlamingoAuraP"
+        _0xpe.Texture = "rbxasset://textures/particles/sparkles_main.dds"
+        _0xpe.Lifetime = NumberRange.new(0.5, 1.1)
+        _0xpe.Rate = 35
+        _0xpe.Speed = NumberRange.new(1, 3)
+        _0xpe.SpreadAngle = Vector2.new(180, 180)
+        _0xpe.Rotation = NumberRange.new(0, 360)
+        _0xpe.RotSpeed = NumberRange.new(-90, 90)
+        _0xpe.Color = ColorSequence.new(_0x3fa1(255, 80, 160), _0x3fa1(125, 85, 255))
+        _0xpe.Size = NumberSequence.new({NumberSequenceKeypoint.new(0, 0.7), NumberSequenceKeypoint.new(1, 0)})
+        _0xpe.Transparency = NumberSequence.new({NumberSequenceKeypoint.new(0, 0.1), NumberSequenceKeypoint.new(1, 1)})
+        _0xpe.LightEmission = 1
+        _0xpe.Parent = _0xatt
+        _0xC.auraatt = _0xatt
+    end)
+end
+
+_0xC.trail0 = nil
+_0xC.trail1 = nil
+_0xC.trailobj = nil
+local function _0xRAINBOW_TRAIL(_0xon)
+    if _0xC.trailobj then
+        _0xbb44(function() _0xC.trailobj:Destroy() end)
+        _0xC.trailobj = nil
+    end
+    for _, _0xat in _0x1248({_0xC.trail0, _0xC.trail1}) do
+        if _0xat then _0xbb44(function() _0xat:Destroy() end) end
+    end
+    _0xC.trail0 = nil
+    _0xC.trail1 = nil
+    if not _0xon then return end
+    local _0xch = _0x8ca5.Character
+    local _0xmr = _0xch and _0xFC(_0xch, "HumanoidRootPart")
+    if not _0xmr then return end
+    _0xbb44(function()
+        local _0xa0 = _0xee03("Attachment")
+        _0xa0.Name = "FlamingoTrailA"
+        _0xa0.Position = _0x7ce2(0, 0.8, 0)
+        _0xa0.Parent = _0xmr
+        local _0xa1 = _0xee03("Attachment")
+        _0xa1.Name = "FlamingoTrailB"
+        _0xa1.Position = _0x7ce2(0, -0.8, 0)
+        _0xa1.Parent = _0xmr
+        local _0xtr = _0xee03("Trail")
+        _0xtr.Name = "FlamingoTrail"
+        _0xtr.Attachment0 = _0xa0
+        _0xtr.Attachment1 = _0xa1
+        _0xtr.Lifetime = 0.6
+        _0xtr.MinLength = 0.1
+        _0xtr.WidthScale = NumberSequence.new({NumberSequenceKeypoint.new(0, 1), NumberSequenceKeypoint.new(1, 0)})
+        _0xtr.Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0, _0x3fa1(255, 70, 70)),
+            ColorSequenceKeypoint.new(0.25, _0x3fa1(255, 220, 60)),
+            ColorSequenceKeypoint.new(0.5, _0x3fa1(80, 255, 120)),
+            ColorSequenceKeypoint.new(0.75, _0x3fa1(70, 170, 255)),
+            ColorSequenceKeypoint.new(1, _0x3fa1(170, 90, 255)),
+        })
+        _0xtr.Transparency = NumberSequence.new({NumberSequenceKeypoint.new(0, 0.1), NumberSequenceKeypoint.new(1, 1)})
+        _0xtr.LightEmission = 1
+        _0xtr.Parent = _0xmr
+        _0xC.trail0 = _0xa0
+        _0xC.trail1 = _0xa1
+        _0xC.trailobj = _0xtr
+    end)
+end
+
+local _0xNECK_ORIG: {[any]: any} = {}
+local _0xSCALE_ORIG: {[any]: any} = {}
+
+_0xC.hspin = nil
+local function _0xHEAD_SPIN(_0xon)
+    if _0xC.hspin then _0xC.hspin:Disconnect() _0xC.hspin = nil end
+    local _0xch = _0x8ca5.Character
+    if not _0xch then return end
+    local _0xneck = nil
+    for _, _0xj in _0x1248(_0xch:GetDescendants()) do
+        if _0xj:IsA("Motor6D") and _0xj.Name == "Neck" then _0xneck = _0xj break end
+    end
+    if not _0xneck then return end
+    if _0xon then
+        if not _0xNECK_ORIG._c0 then _0xNECK_ORIG._c0 = _0xneck.C0 end
+        _0xC.hspin = _0x55c0.RenderStepped:Connect(function()
+            if not _0xSTATE._tg then return end
+            _0xbb44(function()
+                _0xneck.C0 = _0xNECK_ORIG._c0 * CFrame.Angles(0, math.rad((_0x8891() * 360) % 360), 0)
+            end)
+        end)
+    else
+        if _0xNECK_ORIG._c0 then
+            _0xbb44(function() _0xneck.C0 = _0xNECK_ORIG._c0 end)
+        end
+        _0xNECK_ORIG = {}
+    end
+end
+
+local function _0xCHAR_SCALE(_0xs)
+    local _0xch = _0x8ca5.Character
+    local _0xhm = _0xch and _0xGH(_0xch)
+    if not _0xhm then return end
+    _0xs = _0xc746(tonumber(_0xs) or 1, 0.5, 3)
+    for _, _0xvn in _0x1248({"BodyHeightScale", "BodyWidthScale", "BodyDepthScale", "HeadScale"}) do
+        local _0xob = _0xhm:FindFirstChild(_0xvn)
+        if _0xob and _0xob:IsA("NumberValue") then
+            if not _0xSCALE_ORIG[_0xvn] then _0xSCALE_ORIG[_0xvn] = _0xob.Value end
+            _0xob.Value = _0xSCALE_ORIG[_0xvn] * _0xs
+        end
+    end
+end
+
+_0x8ca5.CharacterAdded:Connect(function()
+    _0xNECK_ORIG = {}
+    _0xSCALE_ORIG = {}
+    if _0xSTATE._f1 or _0xSTATE._a1 then _0xFARM_STOP() end
+    _0xFARM._cache = {}
+    if _0xSTATE._t1 then _0x39fd(function() _0xabc0(0.6) _0xTF_BUILD() end) end
+    if _0xSTATE._t7 then _0x39fd(function() _0xabc0(0.6) _0xNAMETAG_BUILD() end) end
+    if _0xC.animcur then _0x39fd(function() _0xabc0(0.6) _0xPLAY_ANIM(_0xC.animcur) end) end
+    if _0xSTATE._te then _0x39fd(function() _0xabc0(0.6) _0xPARTICLE_AURA(true) end) end
+    if _0xSTATE._tf then _0x39fd(function() _0xabc0(0.6) _0xRAINBOW_TRAIL(true) end) end
+    if _0xSTATE._tg then _0x39fd(function() _0xabc0(0.6) _0xHEAD_SPIN(true) end) end
+    if _0xSTATE._th and _0xSTATE._th ~= 1 then _0x39fd(function() _0xabc0(0.6) _0xCHAR_SCALE(_0xSTATE._th) end) end
+end)
+
+_0xLIB:OnUnload(function()
+    _0xSTATE._f1 = false
+    _0xSTATE._a1 = false
+    _0xFARM_STOP()
+    _0xFARM_CLIP_OFF()
+    _0xPLAY_ANIM(nil)
+    _0xPARTICLE_AURA(false)
+    _0xRAINBOW_TRAIL(false)
+    _0xHEAD_SPIN(false)
+    if _0xSTATE._th and _0xSTATE._th ~= 1 then
+        local _0xch = _0x8ca5.Character
+        local _0xhm = _0xch and _0xGH(_0xch)
+        if _0xhm then
+            for _, _0xvn in _0x1248({"BodyHeightScale", "BodyWidthScale", "BodyDepthScale", "HeadScale"}) do
+                local _0xob = _0xhm:FindFirstChild(_0xvn)
+                if _0xob and _0xob:IsA("NumberValue") and _0xSCALE_ORIG[_0xvn] then
+                    _0xob.Value = _0xSCALE_ORIG[_0xvn]
+                end
+            end
+        end
+    end
+end)
+
+local function _0xSERVER_HOP()
+    _0xbb44(function()
+        game:GetService("TeleportService"):Teleport(game.PlaceId, _0x8ca5)
+    end)
+end
+
+local _0xCFG = {name = "default", sel = "none", values = {"none"}, dd = nil, input = nil}
+local _0xCFG_DIR = "Flamingo/configs"
+
+local function _0xCFG_LIST()
+    local _0xt = {}
+    if type(listfiles) == "function" then
+        local _0xok, _0xfs = _0xbb44(listfiles, _0xCFG_DIR)
+        if _0xok and type(_0xfs) == "table" then
+            for _, _0xf in _0x1248(_0xfs) do
+                local _0xn = _0xf:match("([^\\/]+)%.json$")
+                if _0xn then _0x4401(_0xt, _0xn) end
+            end
+        end
+    end
+    table.sort(_0xt)
+    return _0xt
+end
+
+local function _0xCFG_CLEAN(_0xn)
+    _0xn = tostring(_0xn or ""):gsub("[^%w_%- ]", "")
+    if _0xn == "" then _0xn = "default" end
+    return _0xn
+end
+
+local function _0xCFG_PATH(_0xn)
+    return _0xCFG_DIR .. "/" .. _0xCFG_CLEAN(_0xn) .. ".json"
+end
+
+local function _0xCFG_REFRESH()
+    local _0xl = _0xCFG_LIST()
+    if #_0xl == 0 then _0xl = {"none"} end
+    _0xCFG.values = _0xl
+    if _0xCFG.dd then
+        _0xCFG.dd:SetValues(_0xl)
+    end
+    local _0xsel = _0xCFG.sel
+    if not table.find(_0xl, _0xsel) then _0xsel = _0xl[1] end
+    _0xCFG.sel = _0xsel
+    if _0xCFG.dd then _0xCFG.dd:SetValue(_0xsel) end
+end
+
+local function _0xCFG_SAVE()
+    local _0xdata = {}
+    local function _0xadd(_0xopts)
+        for _0xi, _0xo in _0x6790(_0xopts or {}) do
+            if _0xi ~= "config_name" and _0xi ~= "config_sel" and _0xi ~= "menu_key" then
+                if _0xo.Type == "Toggle" or _0xo.Type == "Slider" or _0xo.Type == "Dropdown" then
+                    _0xdata[_0xi] = {t = _0xo.Type, v = _0xo.Value}
+                elseif _0xo.Type == "Input" then
+                    _0xdata[_0xi] = {t = _0xo.Type, v = _0xo.Value}
+                elseif _0xo.Type == "KeyPicker" then
+                    _0xdata[_0xi] = {t = _0xo.Type, v = _0xo.Value, m = _0xo.Mode}
+                end
+            end
+        end
+    end
+    _0xadd(_0xTGLS)
+    _0xadd(_0xOPTS)
+    local _0xn = _0xCFG_CLEAN(_0xCFG.name)
+    local _0xok = _0xbb44(function()
+        writefile(_0xCFG_PATH(_0xn), _0x1bc9:JSONEncode(_0xdata))
+    end)
+    if _0xok then
+        _0xCFG.name = _0xn
+        _0xCFG.sel = _0xn
+        if _0xCFG.input then _0xCFG.input:SetValue(_0xn) end
+        _0xCFG_REFRESH()
+        _0xNOTIF("Flamingo", "Config saved", 2)
+    end
+end
+
+local function _0xCFG_LOAD(_0xn)
+    _0xn = _0xCFG_CLEAN(_0xn)
+    local _0xpath = _0xCFG_PATH(_0xn)
+    if type(isfile) ~= "function" or not isfile(_0xpath) then return end
+    local _0xok, _0xraw = _0xbb44(readfile, _0xpath)
+    if not _0xok or type(_0xraw) ~= "string" then return end
+    local _0xok2, _0xdata = _0xbb44(function() return _0x1bc9:JSONDecode(_0xraw) end)
+    if not _0xok2 or type(_0xdata) ~= "table" then return end
+    local _0xopts = _0xOPTS or {}
+    local _0xtgs = _0xTGLS or {}
+    for _0xi, _0xe in _0x6790(_0xdata) do
+        local _0xo = _0xi ~= "menu_key" and (_0xopts[_0xi] or _0xtgs[_0xi]) or nil
+        if _0xo and type(_0xe) == "table" then
+            if _0xo.Type == "Toggle" or _0xo.Type == "Slider" or _0xo.Type == "Dropdown" then
+                if _0xe.v ~= nil then
+                    _0xbb44(function() _0xo:SetValue(_0xe.v) end)
+                end
+            elseif _0xo.Type == "Input" then
+                if _0xe.v ~= nil then
+                    _0xbb44(function() _0xo:SetValue(_0xe.v) end)
+                end
+            elseif _0xo.Type == "KeyPicker" then
+                _0xbb44(function() _0xo:SetValue({_0xe.v or "RightControl", _0xe.m or "Toggle"}) end)
+            end
+        end
+    end
+    _0xCFG.name = _0xn
+    _0xCFG.sel = _0xn
+    if _0xCFG.input then _0xCFG.input:SetValue(_0xn) end
+    _0xCFG_REFRESH()
+    _0xNOTIF("Flamingo", "Config loaded", 2)
+end
+
+local function _0xCFG_DELETE(_0xn)
+    _0xn = _0xCFG_CLEAN(_0xn)
+    local _0xpath = _0xCFG_PATH(_0xn)
+    if type(isfile) == "function" and isfile(_0xpath) and type(delfile) == "function" then
+        _0xbb44(delfile, _0xpath)
+        _0xCFG_REFRESH()
+        _0xNOTIF("Flamingo", "Config deleted", 2)
+    end
+end
+
+local _0xRSTATE = {
+    _e2 = true, _e3 = true, _e4 = true, _e5 = false,
+    _e6 = true, _e7 = 2000, _e8 = 1,
+    _c1 = false, _c2 = 150, _c3 = 100, _c4 = false, _c5 = false,
+    _c6 = "Head", _c7 = 0.4, _c9 = false, _cp = 0, _cv = false,
+    _cr = false, _cf = false, _cfr = 2, _cl = false, _clr = 2, _cm = 15,
+    _sa = false, _sc = 100, _cd = 400, _cq = "Crosshair",
+    _rg = false, _rr = 8,
+    _v1 = false, _v2 = false, _va = 0.5,
+    _vf = true, _vo = true, _vfc = nil, _voc = nil,
+    _a1 = false, _a2 = "1v1", _a3 = false, _a4 = "Arena",
+    _a5 = false, _a6 = "Assault Rifle", _a7 = "Handgun", _a8 = "Fists", _a9 = "Grenade",
+    _aa = false, _ab = "Touch",
+}
+
+local _0xRIV = {_fc = nil, _cc = nil, _il = nil, _gun = nil, _req = false, _draw = {}, _hl = {}, _fa = {}, _loops = false, _aim = nil, _fov = nil, _lp = nil, _patch = {}, _pdone = false,
+    _unhook = nil, _lat = 0, _cache = nil, _wrap = {}, _rage = nil, _trig = nil, _rat = 0,
+    _cos = nil, _skins = {}}
+local _0xRFOE = _0x3fa1(255, 255, 255)
+
+local _0xHPLO = _0x3fa1(252, 71, 77)
+local _0xHPMID = _0x3fa1(255, 255, 0)
+local _0xHPHI = _0x3fa1(131, 245, 78)
+
+local function _0xHPCOL(_0xpc)
+    if _0xpc >= 0.5 then
+        return _0xHPMID:Lerp(_0xHPHI, (_0xpc - 0.5) * 2)
+    end
+    return _0xHPLO:Lerp(_0xHPMID, _0xpc * 2)
+end
+
+function _0xRIV.req()
+    if _0xRIV._fc and _0xRIV._il and _0xRIV._gun then return end
+    local _0xps = _0x8ca5:FindFirstChild("PlayerScripts")
+    if _0xps then
+        local _0xct = _0xFC(_0xps, "Controllers")
+        local _0xmd = _0xFC(_0xps, "Modules")
+        if _0xct then
+            if not _0xRIV._fc then _0xbb44(function() _0xRIV._fc = require(_0xct.FighterController) end) end
+            if not _0xRIV._cc then _0xbb44(function() _0xRIV._cc = require(_0xct.CameraController) end) end
+        end
+        if _0xmd and not _0xRIV._gun then
+            _0xbb44(function() _0xRIV._gun = require(_0xmd.ItemTypes.Gun) end)
+        end
+    end
+    local _0xrm = _0xFC(_0x72d4, "Modules")
+    if _0xrm then
+        if not _0xRIV._il then _0xbb44(function() _0xRIV._il = require(_0xrm.ItemLibrary) end) end
+        if not _0xRIV._ut then _0xbb44(function() _0xRIV._ut = require(_0xrm.Utility) end) end
+        if not _0xRIV._en then _0xbb44(function() _0xRIV._en = require(_0xrm.EnumLibrary) end) end
+    end
+    if not _0xRIV._ui then
+        local _0xr = _0xFC(_0x72d4, "Remotes")
+        local _0xrp = _0xr and _0xFC(_0xr, "Replication")
+        local _0xfg = _0xrp and _0xFC(_0xrp, "Fighter")
+        local _0xui = _0xfg and _0xFC(_0xfg, "UseItem")
+        if _0xui and _0xui:IsA("RemoteEvent") then _0xRIV._ui = _0xui end
+    end
+end
+
+function _0xRIV.charpart(_0xpl, _0xwant)
+    local _0xch = _0xpl and _0xpl.Character
+    if not _0xch then return nil end
+    local _0xhm = _0xGH(_0xch)
+    if not _0xhm or _0xhm.Health <= 0 then return nil end
+    if _0xwant then
+        local _0xp = _0xFC(_0xch, _0xwant)
+        if _0xp then return _0xp end
+    end
+    return _0xFC(_0xch, "Head") or _0xFC(_0xch, "HumanoidRootPart")
+end
+
+function _0xRIV.predict(_0xpart)
+    local _0xv = _0xVEL(_0xpart)
+    local _0xlead = _0xc746(_0xv.Magnitude / 350, 0, 0.12)
+    if _0xRSTATE._cp > 0 then _0xlead = _0xRSTATE._cp end
+    if not _0xRSTATE._cv then _0xv = Vector3.new(_0xv.X, 0, _0xv.Z) end
+    local _0xoff = _0xv * _0xlead
+    if _0xoff.Magnitude > _0xRSTATE._cm then _0xoff = _0xoff.Unit * _0xRSTATE._cm end
+    return _0xpart.Position + _0xoff
+end
+
+function _0xRIV.camdata(_0xfrom, _0xpart)
+    local _0xu = _0xRIV._ut
+    if not _0xu or not _0xpart or not _0xpart.Parent then return nil end
+    local _0xaim = _0xRIV.predict(_0xpart)
+    local _0xlook = _0x4b58(_0xfrom, _0xaim)
+    local _0xok, _0xd = _0xbb44(function()
+        local _0xt = {}
+        _0xt[utf8.char(1)] = {
+            [utf8.char(0)] = _0xu:EncodeCFrame(_0xlook),
+            [utf8.char(1)] = _0xu:EncodeCFrame(_0xlook),
+            [utf8.char(2)] = _0xpart,
+            [utf8.char(3)] = _0xu:EncodeCFrame(_0xpart.CFrame:ToObjectSpace(_0x4b58(_0xaim)))
+        }
+        return _0xt
+    end)
+    if _0xok then return _0xd end
+    return nil
+end
+
+function _0xRIV.fighter(_0xpl)
+    if not _0xRIV._fc then _0xRIV.req() end
+    if not _0xRIV._fc then return nil end
+    local _0xok, _0xf = _0xbb44(function() return _0xRIV._fc:GetFighter(_0xpl) end)
+    if _0xok and _0xf then return _0xf end
+    return nil
+end
+
+function _0xRIV.me()
+    if not _0xRIV._fc then _0xRIV.req() end
+    if not _0xRIV._fc then return nil end
+    local _0xok, _0xf = _0xbb44(function()
+        return _0xRIV._fc.LocalFighter or _0xRIV._fc:GetFighter(_0x8ca5)
+    end)
+    if _0xok then return _0xf end
+    return nil
+end
+
+function _0xRIV.team(_0xf)
+    if type(_0xf) ~= "table" or _0xf.IsBot then return nil end
+    if type(_0xf.Get) == "function" then
+        local _0xok, _0xv = _0xbb44(_0xf.Get, _0xf, "TeamID")
+        if _0xok and type(_0xv) == "string" and _0xv ~= "" then return _0xv end
+    end
+    local _0xd = rawget(_0xf, "Data")
+    if type(_0xd) == "table" and type(_0xd.TeamID) == "string" and _0xd.TeamID ~= "" then
+        return _0xd.TeamID
+    end
+    return nil
+end
+
+function _0xRIV.body(_0xf)
+    local _0xe = _0xf and _0xf.Entity
+    if type(_0xe) ~= "table" then return nil, nil end
+    local _0xm = _0xe.Model
+    local _0xr = _0xe.RootPart or (_0xm and (_0xFC(_0xm, "HumanoidRootPart") or _0xm.PrimaryPart))
+    return _0xr, _0xm
+end
+
+function _0xRIV.head(_0xf)
+    local _0xe = _0xf and _0xf.Entity
+    if type(_0xe) ~= "table" then return nil end
+    local _0xm = _0xe.Model
+    return _0xe.Head or (_0xm and _0xFC(_0xm, "Head")) or _0xe.RootPart
+end
+
+function _0xRIV.mate(_0xf)
+    if not _0xRSTATE._e6 then return false end
+    local _0xlf = _0xRIV.me()
+    local _0xmt = _0xlf and _0xRIV.team(_0xlf)
+    local _0xtt = _0xRIV.team(_0xf)
+    if _0xmt and _0xtt then return _0xmt == _0xtt end
+    local _0xpl = _0xf and _0xf.Player
+    if typeof(_0xpl) == "Instance" and _0x8ca5.Team and _0xpl.Team then
+        return _0x8ca5.Team == _0xpl.Team
+    end
+    return false
+end
+
+function _0xRIV.valid(_0xf)
+    if type(_0xf) ~= "table" then return false end
+    if _0xf.IsLocalPlayer or _0xf.Player == _0x8ca5 then return false end
+    if _0xRIV.mate(_0xf) then return false end
+    if type(_0xf.IsAlive) == "function" then
+        local _0xok, _0xa = _0xbb44(_0xf.IsAlive, _0xf)
+        if _0xok and _0xa == false then return false end
+    end
+    local _0xr = _0xRIV.body(_0xf)
+    return _0xr ~= nil and _0xr.Parent ~= nil
+end
+
+function _0xRIV.list()
+    local _0xnow = os.clock()
+    if _0xnow - _0xRIV._lat < 0.1 and _0xRIV._cache then return _0xRIV._cache end
+    _0xRIV._lat = _0xnow
+    local _0xout = {}
+    if not _0xRIV._fc then _0xRIV.req() end
+    local _0xok, _0xobjs = _0xbb44(function() return _0xRIV._fc and _0xRIV._fc.Objects end)
+    if _0xok and type(_0xobjs) == "table" then
+        for _, _0xf in _0x6790(_0xobjs) do
+            if _0xRIV.valid(_0xf) then _0x4401(_0xout, _0xf) end
+        end
+    end
+    if #_0xout == 0 then
+        for _, _0xpl in _0x1248(_0xGP()) do
+            local _0xch = _0xpl.Character
+            if _0xpl ~= _0x8ca5 and _0xch then
+                local _0xhr = _0xFC(_0xch, "HumanoidRootPart")
+                local _0xhm = _0xGH(_0xch)
+                local _0xmate = _0xRSTATE._e6 and _0x8ca5.Team and _0xpl.Team and _0x8ca5.Team == _0xpl.Team
+                if _0xhr and not _0xmate and not (_0xhm and _0xhm.Health <= 0) then
+                    local _0xw = _0xRIV._wrap[_0xpl]
+                    if not _0xw then
+                        _0xw = {Player = _0xpl, Entity = {}}
+                        _0xRIV._wrap[_0xpl] = _0xw
+                    end
+                    local _0xe = _0xw.Entity
+                    _0xe.Model, _0xe.RootPart, _0xe.Humanoid = _0xch, _0xhr, _0xhm
+                    _0xe.Head = _0xFC(_0xch, "Head")
+                    _0x4401(_0xout, _0xw)
+                end
+            end
+        end
+    end
+    _0xRIV._cache = _0xout
+    return _0xout
+end
+
+function _0xRIV.remotes()
+    return _0xFC(_0x72d4, "Remotes")
+end
+
+local _0xSKIN = {
+    eq = {}, fav = {}, fin = {}, inv = {},
+    elib = nil, clib = nil, ilib = nil, dctrl = nil, fctrl = nil,
+    coss = nil, cdata = nil, cwep = nil, vprof = nil,
+    on = false, ready = false, hooked = false,
+    file = "Flamingo/skins.json"
+}
+
+function _0xSKIN.bad(_0xn)
+    if type(_0xn) ~= "string" then return true end
+    return _0xn:find("MISSING_") or _0xn:find("Bubblegum") or _0xn:find("Ragdoll")
+        or _0xn:find("Fall Apart") or _0xn:find("Every Finisher Ever")
+end
+
+function _0xSKIN.enum(_0xn)
+    if not _0xSKIN.elib then return nil end
+    local _0xok, _0xid = _0xbb44(_0xSKIN.elib.ToEnum, _0xSKIN.elib, _0xn)
+    return _0xok and _0xid or nil
+end
+
+function _0xSKIN.clone(_0xn, _0xct, _0xinv, _0xfavonly)
+    if _0xSKIN.bad(_0xn) then return nil end
+    local _0xbase = _0xSKIN.coss and _0xSKIN.coss[_0xn]
+    if not _0xbase then return nil end
+    local _0xd = table.clone(_0xbase)
+    _0xd.Name = _0xn
+    _0xd.Type = _0xd.Type or _0xct
+    _0xd.Seed = _0xd.Seed or _0xd200(1, 1000000)
+    local _0xe = _0xSKIN.enum(_0xn)
+    if _0xe then _0xd.Enum = _0xe _0xd.ObjectID = _0xd.ObjectID or _0xe end
+    if _0xinv ~= nil then _0xd.Inverted = _0xinv end
+    if _0xfavonly ~= nil then _0xd.OnlyUseFavorites = _0xfavonly end
+    return _0xd
+end
+
+function _0xSKIN.save()
+    if type(writefile) ~= "function" then return end
+    _0xbb44(function()
+        local _0xcfg = {equipped = {}, favorites = _0xSKIN.fav}
+        for _0xw, _0xcos in _0x6790(_0xSKIN.eq) do
+            local _0xslot = {}
+            _0xcfg.equipped[_0xw] = _0xslot
+            for _0xct, _0xcd in _0x6790(_0xcos) do
+                if _0xcd and _0xcd.Name and not _0xSKIN.bad(_0xcd.Name) then
+                    _0xslot[_0xct] = {name = _0xcd.Name, seed = _0xcd.Seed, inverted = _0xcd.Inverted}
+                end
+            end
+        end
+        if not isfolder("Flamingo") then makefolder("Flamingo") end
+        writefile(_0xSKIN.file, _0x1bc9:JSONEncode(_0xcfg))
+    end)
+end
+
+function _0xSKIN.load()
+    if type(readfile) ~= "function" or type(isfile) ~= "function" then return end
+    if not isfile(_0xSKIN.file) then return end
+    _0xbb44(function()
+        local _0xcfg = _0x1bc9:JSONDecode(readfile(_0xSKIN.file))
+        if _0xcfg.equipped then
+            for _0xw, _0xcos in _0x6790(_0xcfg.equipped) do
+                _0xSKIN.eq[_0xw] = {}
+                for _0xct, _0xcd in _0x6790(_0xcos) do
+                    if not _0xSKIN.bad(_0xcd.name) then
+                        local _0xcl = _0xSKIN.clone(_0xcd.name, _0xct, _0xcd.inverted)
+                        if _0xcl then
+                            _0xcl.Seed = _0xcd.seed
+                            _0xSKIN.eq[_0xw][_0xct] = _0xcl
+                        end
+                    end
+                end
+            end
+        end
+        _0xSKIN.fav = _0xcfg.favorites or {}
+    end)
+end
+
+function _0xSKIN.rebuild()
+    table.clear(_0xSKIN.inv)
+    if _0xSKIN.coss then
+        for _0xn in _0x6790(_0xSKIN.coss) do
+            if not _0xSKIN.bad(_0xn) then _0xSKIN.inv[_0xn] = true end
+        end
+    end
+    for _, _0xcos in _0x6790(_0xSKIN.eq) do
+        for _, _0xcd in _0x6790(_0xcos) do
+            if _0xcd and _0xcd.Name and not _0xSKIN.bad(_0xcd.Name) then _0xSKIN.inv[_0xcd.Name] = true end
+        end
+    end
+end
+
+function _0xSKIN.rep(_0xkey)
+    _0xbb44(function()
+        if not _0xSKIN.cdata and _0xSKIN.dctrl.CurrentData then _0xSKIN.cdata = _0xSKIN.dctrl.CurrentData end
+        if _0xSKIN.cdata then _0xSKIN.cdata:Replicate(_0xkey) end
+    end)
+end
+
+function _0xSKIN.held()
+    if not _0xSKIN.fctrl then return nil end
+    local _0xok, _0xf = _0xbb44(function() return _0xSKIN.fctrl:GetFighter(_0x8ca5) end)
+    if not _0xok or not _0xf or not _0xf.Items then return nil end
+    for _, _0xit in _0x6790(_0xf.Items) do
+        if _0xit.IsEquipped then return _0xit.Name end
+    end
+    return nil
+end
+
+function _0xSKIN.start()
+    if _0xSKIN.hooked then return _0xSKIN.ready end
+    _0xSKIN.hooked = true
+    local _0xps = _0x8ca5:FindFirstChild("PlayerScripts")
+    local _0xctrls = _0xps and _0xFC(_0xps, "Controllers")
+    local _0xrmods = _0xFC(_0x72d4, "Modules")
+    if not _0xctrls or not _0xrmods then return false end
+
+    _0xbb44(function()
+        _0xSKIN.elib = require(_0xrmods:WaitForChild("EnumLibrary", 10))
+        if _0xSKIN.elib then _0xSKIN.elib:WaitForEnumBuilder() end
+    end)
+    _0xbb44(function() _0xSKIN.clib = require(_0xrmods:WaitForChild("CosmeticLibrary", 10)) end)
+    _0xbb44(function() _0xSKIN.ilib = require(_0xrmods:WaitForChild("ItemLibrary", 10)) end)
+    _0xbb44(function() _0xSKIN.dctrl = require(_0xctrls:WaitForChild("PlayerDataController", 10)) end)
+    _0xbb44(function() _0xSKIN.fctrl = require(_0xctrls:WaitForChild("FighterController", 10)) end)
+    if not _0xSKIN.clib or not _0xSKIN.dctrl then return false end
+    _0xSKIN.coss = _0xSKIN.clib.Cosmetics
+    _0xSKIN.cdata = _0xSKIN.dctrl.CurrentData
+    if not _0xSKIN.cdata then
+        _0x39fd(function()
+            repeat _0xabc0() until _0xSKIN.dctrl.CurrentData
+            _0xSKIN.cdata = _0xSKIN.dctrl.CurrentData
+        end)
+    end
+
+    _0xSKIN.load()
+    _0xSKIN.rebuild()
+    for _0xw, _0xd in _0x6790(_0xSKIN.eq) do
+        if _0xd.Finisher and _0xd.Finisher.Name then _0xSKIN.fin[_0xw] = _0xd.Finisher.Name end
+    end
+
+    local _0xoget = _0xSKIN.dctrl.Get
+    _0xSKIN.oget = _0xoget
+    _0xSKIN.dctrl.Get = function(_0xself, _0xkey)
+        local _0xdata = _0xoget(_0xself, _0xkey)
+        if not _0xSKIN.on then return _0xdata end
+        if _0xkey == "CosmeticInventory" then
+            local _0xproxy = {}
+            if _0xdata then
+                for _0xk, _0xv in _0x6790(_0xdata) do
+                    if not _0xSKIN.bad(_0xk) then _0xproxy[_0xk] = _0xv end
+                end
+            end
+            for _0xn in _0x6790(_0xSKIN.inv) do _0xproxy[_0xn] = true end
+            return _0xproxy
+        end
+        if _0xkey == "FavoritedCosmetics" then
+            local _0xres = _0xdata and table.clone(_0xdata) or {}
+            for _0xw, _0xfv in _0x6790(_0xSKIN.fav) do
+                local _0xslot = _0xres[_0xw] or {}
+                _0xres[_0xw] = _0xslot
+                for _0xn, _0xis in _0x6790(_0xfv) do
+                    if not _0xSKIN.bad(_0xn) then _0xslot[_0xn] = _0xis end
+                end
+            end
+            return _0xres
+        end
+        return _0xdata
+    end
+
+    local _0xogw = _0xSKIN.dctrl.GetWeaponData
+    _0xSKIN.dctrl.GetWeaponData = function(_0xself, _0xwn)
+        local _0xdata = _0xogw(_0xself, _0xwn)
+        if not _0xdata or not _0xSKIN.on then return _0xdata end
+        local _0xm = table.clone(_0xdata)
+        _0xm.Name = _0xwn
+        local _0xweq = _0xSKIN.eq[_0xwn]
+        if _0xweq then for _0xct, _0xcd in _0x6790(_0xweq) do _0xm[_0xct] = _0xcd end end
+        return _0xm
+    end
+
+    if type(hookmetamethod) == "function" then
+        local _0xrems = _0xFC(_0x72d4, "Remotes")
+        local _0xdrem = _0xrems and _0xFC(_0xrems, "Data")
+        local _0xeqr = _0xdrem and _0xFC(_0xdrem, "EquipCosmetic")
+        local _0xfavr = _0xdrem and _0xFC(_0xdrem, "FavoriteCosmetic")
+        if _0xeqr then
+            local _0xonc
+            _0xonc = hookmetamethod(game, "__namecall", function(_0xself, ...)
+                if not _0xSKIN.on or getnamecallmethod() ~= "FireServer" then return _0xonc(_0xself, ...) end
+                local _0xargs = {...}
+                if _0xself == _0xeqr then
+                    local _0xwn, _0xct, _0xcn, _0xopt = _0xargs[1], _0xargs[2], _0xargs[3], _0xargs[4] or {}
+                    if not _0xcn or _0xcn == "None" or _0xcn == "" then
+                        _0xSKIN.eq[_0xwn] = _0xSKIN.eq[_0xwn] or {}
+                        _0xSKIN.eq[_0xwn][_0xct] = nil
+                        if not next(_0xSKIN.eq[_0xwn]) then _0xSKIN.eq[_0xwn] = nil end
+                        _0xSKIN.rebuild()
+                        _0x71ee(function()
+                            _0xSKIN.rep("WeaponInventory")
+                            _0xabc0(0.2)
+                            _0xSKIN.save()
+                        end)
+                        return _0xonc(_0xself, ...)
+                    end
+                    if _0xSKIN.bad(_0xcn) then return _0xonc(_0xself, ...) end
+                    local _0xreal = _0xoget(_0xSKIN.dctrl, "CosmeticInventory")
+                    if _0xreal and type(_0xreal[_0xcn]) ~= "boolean" and _0xreal[_0xcn] ~= nil then
+                        return _0xonc(_0xself, ...)
+                    end
+                    _0xSKIN.eq[_0xwn] = _0xSKIN.eq[_0xwn] or {}
+                    local _0xcl = _0xSKIN.clone(_0xcn, _0xct, _0xopt.IsInverted, _0xopt.OnlyUseFavorites)
+                    if _0xcl then _0xSKIN.eq[_0xwn][_0xct] = _0xcl end
+                    if _0xct == "Finisher" then _0xSKIN.fin[_0xwn] = _0xcn end
+                    _0xSKIN.rebuild()
+                    _0x71ee(function()
+                        _0xSKIN.rep("WeaponInventory")
+                        _0xabc0(0.2)
+                        _0xSKIN.save()
+                    end)
+                    return
+                end
+                if _0xself == _0xfavr then
+                    local _0xfw, _0xfn, _0xfs = _0xargs[1], _0xargs[2], _0xargs[3]
+                    if not _0xfn or _0xfn == "None" or _0xfn == "" then return _0xonc(_0xself, ...) end
+                    if _0xSKIN.bad(_0xfn) then return _0xonc(_0xself, ...) end
+                    _0xSKIN.fav[_0xfw] = _0xSKIN.fav[_0xfw] or {}
+                    _0xSKIN.fav[_0xfw][_0xfn] = _0xfs or nil
+                    _0xSKIN.save()
+                    _0x39fd(_0xSKIN.rep, "FavoritedCosmetics")
+                    return
+                end
+                return _0xonc(_0xself, ...)
+            end)
+        end
+    end
+
+    local _0xmods = _0xps and _0xFC(_0xps, "Modules")
+    local _0xcipath = _0xmods and _0xmods:FindFirstChild("ClientItem", true)
+    local _0xcitem = nil
+    _0xbb44(function() _0xcitem = require(_0xcipath) end)
+    if _0xcitem and _0xcitem._CreateViewModel then
+        local _0xocvm = _0xcitem._CreateViewModel
+        _0xcitem._CreateViewModel = function(_0xself, _0xref)
+            local _0xwn = _0xself.Name
+            local _0xwp = _0xself.ClientFighter and _0xself.ClientFighter.Player
+            _0xSKIN.cwep = (_0xwp == _0x8ca5) and _0xwn or nil
+            if _0xSKIN.on and _0xwp == _0x8ca5 and _0xSKIN.eq[_0xwn] and _0xSKIN.eq[_0xwn].Skin and _0xref then
+                local _0xsk = _0xSKIN.eq[_0xwn].Skin
+                local _0xdk = _0xself:ToEnum("Data")
+                if _0xref[_0xdk] then
+                    _0xref[_0xdk][_0xself:ToEnum("Skin")] = _0xsk
+                    _0xref[_0xdk][_0xself:ToEnum("Name")] = _0xsk.Name
+                elseif _0xref.Data then
+                    _0xref.Data.Skin = _0xsk
+                    _0xref.Data.Name = _0xsk.Name
+                end
+            end
+            local _0xres = _0xocvm(_0xself, _0xref)
+            _0xSKIN.cwep = nil
+            return _0xres
+        end
+    end
+
+    local _0xvmp = _0xcipath and _0xcipath:FindFirstChild("ClientViewModel")
+    if _0xvmp then
+        local _0xcvm = nil
+        _0xbb44(function() _0xcvm = require(_0xvmp) end)
+        if _0xcvm and _0xcvm.GetWrap then
+            local _0xogwr = _0xcvm.GetWrap
+            _0xcvm.GetWrap = function(_0xself)
+                local _0xci = _0xself.ClientItem
+                local _0xwn = _0xci and _0xci.Name
+                local _0xwp = _0xci and _0xci.ClientFighter and _0xci.ClientFighter.Player
+                local _0xweq = _0xSKIN.on and _0xwn and _0xwp == _0x8ca5 and _0xSKIN.eq[_0xwn]
+                return (_0xweq and _0xweq.Wrap) or _0xogwr(_0xself)
+            end
+        end
+        if _0xcvm and _0xcvm.new then
+            local _0xonew = _0xcvm.new
+            _0xcvm.new = function(_0xrd, _0xci)
+                local _0xwp = _0xci.ClientFighter and _0xci.ClientFighter.Player
+                local _0xwn = _0xSKIN.cwep or _0xci.Name
+                if _0xSKIN.on and _0xwp == _0x8ca5 and _0xSKIN.eq[_0xwn] then
+                    _0xbb44(function()
+                        local _0xrcls = require(_0x72d4.Modules.ReplicatedClass)
+                        local _0xdk = _0xrcls:ToEnum("Data")
+                        _0xrd[_0xdk] = _0xrd[_0xdk] or {}
+                        local _0xcos = _0xSKIN.eq[_0xwn]
+                        local _0xslot = _0xrd[_0xdk]
+                        if _0xcos.Skin then _0xslot[_0xrcls:ToEnum("Skin")] = _0xcos.Skin end
+                        if _0xcos.Wrap then _0xslot[_0xrcls:ToEnum("Wrap")] = _0xcos.Wrap end
+                        if _0xcos.Charm then _0xslot[_0xrcls:ToEnum("Charm")] = _0xcos.Charm end
+                    end)
+                end
+                local _0xres = _0xonew(_0xrd, _0xci)
+                if _0xSKIN.on and _0xwp == _0x8ca5 and _0xSKIN.eq[_0xwn] and _0xSKIN.eq[_0xwn].Wrap and _0xres._UpdateWrap then
+                    _0xres:_UpdateWrap()
+                    task.delay(0.1, function()
+                        if not _0xres._destroyed then _0xbb44(function() _0xres:_UpdateWrap() end) end
+                    end)
+                end
+                return _0xres
+            end
+        end
+    end
+
+    if _0xSKIN.ilib and _0xSKIN.ilib.GetViewModelImageFromWeaponData then
+        local _0xogvi = _0xSKIN.ilib.GetViewModelImageFromWeaponData
+        _0xSKIN.ilib.GetViewModelImageFromWeaponData = function(_0xself, _0xwd, _0xhi)
+            if not _0xwd or not _0xSKIN.on then return _0xogvi(_0xself, _0xwd, _0xhi) end
+            local _0xweq = _0xSKIN.eq[_0xwd.Name]
+            if _0xweq and _0xweq.Skin and (_0xwd.Skin == _0xweq.Skin or _0xSKIN.vprof == _0x8ca5) then
+                local _0xsi = _0xself.ViewModels[_0xweq.Skin.Name]
+                if _0xsi then return _0xsi[_0xhi and "ImageHighResolution" or "Image"] or _0xsi.Image end
+            end
+            return _0xogvi(_0xself, _0xwd, _0xhi)
+        end
+    end
+
+    _0xbb44(function()
+        local _0xvp = require(_0xmods.Pages.ViewProfile)
+        if _0xvp and _0xvp.Fetch then
+            local _0xof = _0xvp.Fetch
+            _0xvp.Fetch = function(_0xself, _0xtp)
+                _0xSKIN.vprof = _0xtp
+                return _0xof(_0xself, _0xtp)
+            end
+        end
+    end)
+
+    _0xbb44(function()
+        local _0xce = require(_0xmods:FindFirstChild("ClientEntity", true))
+        if _0xce and _0xce._PlayFinisher then
+            local _0xofin = _0xce._PlayFinisher
+            _0xce._PlayFinisher = function(_0xself, _0xfn, ...)
+                if not _0xSKIN.on then return _0xofin(_0xself, _0xfn, ...) end
+                local _0xew = _0xSKIN.held()
+                local _0xtf = _0xew and (_0xSKIN.fin[_0xew]
+                    or (_0xSKIN.eq[_0xew] and _0xSKIN.eq[_0xew].Finisher and _0xSKIN.eq[_0xew].Finisher.Name))
+                return _0xofin(_0xself, _0xtf or _0xfn, ...)
+            end
+        end
+    end)
+
+    _0xSKIN.ready = true
+    return true
+end
+
+
+
+
+
+
+
+
+local _0xSKY = {
+    Milkyway = {"137817405681365", "108406529909981", "104400530594543", "129876530632297", "73372229972523", "87408857415924", 3000, 0, 0},
+    Space = {"166510114", "166510057", "166510116", "166509999", "166510092", "166510131", 3000, 0, 0},
+    Galaxy = {"159454288", "159454296", "159454293", "159454299", "159454293", "159454293", 3000, 0, 0},
+    Nebula = {"5260824661", "5260653793", "5260817288", "5260808177", "5260800833", "5260811073", 3000, 0, 0},
+    PurpleSpace = {"15983964246", "15983966825", "5260817288", "15983968922", "15983967420", "15983966246", 3000, 0, 0},
+    BlueSpace = {"16876552681", "16876543880", "16876546384", "16876541778", "16876548320", "16876550345", 3000, 21, 0},
+    Hell = {"11730857150", "11730842997", "11730849615", "11730840088", "11730852920", "11730855491", 3000, 0, 11},
+    NetherWorld = {"14365019327", "14365023350", "14365018399", "14365019002", "14365018705", "14365018143", 3000, 0, 0},
+    Storm = {"1618913654", "1618913943", "1618913244", "1618912481", "1618912849", "1618911568", 0, 0, 0},
+    Blizzard = {"16653228333", "16653222701", "16653224051", "16653221738", "16653225849", "16653227200", 3000, 21, 0},
+    Winter = {"155674931", "155674246", "155657609", "155657655", "155657671", "155657619", 3000, 21, 11},
+    FlamingSunset = {"415688354", "415688193", "415688242", "415688378", "415688310", "415688274", 3000, 0, 0},
+    Mountains = {"15359412677", "15359411132", "15359412131", "15359410490", "15359411633", "15359417656", 3000, 21, 0},
+    RedNight = {"401664936", "401664862", "401664960", "401664839", "401664881", "401664901", 3000, 0, 0},
+    Pink = {"271077958", "271077243", "271042556", "271042516", "271042310", "271042467", 3000, 0, 0},
+    PurpleClouds = {"570557727", "570557775", "570557559", "570557514", "570557620", "570557672", 3000, 21, 0},
+    BlueClouds = {"591059642", "591059876", "591058104", "591058823", "591057861", "591057625", 3000, 0, 0},
+    Cloudy = {"4495867486", "4495864887", "4495865458", "4495864450", "4495866035", "4495866584", 3000, 21, 11},
+    NewYork = {"11333967970", "11333969768", "11333964303", "11333973069", "11333971332", "11333982864", 3000, 0, 0},
+    FPSBoost = {"11457548274", "11457548274", "11457548274", "11457548274", "11457548274", "11457548274", 0, 0, 0},
+    SolidBlack = {"2013298", "2013298", "2013298", "2013298", "2013298", "2013298", 0, 0, 0},
+}
+
+local _0xSKYLIGHT = {
+    Milkyway = {0, _0x3fa1(60, 62, 95), _0x3fa1(40, 44, 70)},
+    Space = {0, _0x3fa1(50, 55, 95), _0x3fa1(30, 34, 62)},
+    Galaxy = {0, _0x3fa1(58, 48, 96), _0x3fa1(34, 30, 66)},
+    Nebula = {0, _0x3fa1(85, 45, 125), _0x3fa1(52, 30, 80)},
+    PurpleSpace = {0, _0x3fa1(92, 52, 130), _0x3fa1(56, 32, 84)},
+    BlueSpace = {0, _0x3fa1(55, 80, 130), _0x3fa1(34, 52, 88)},
+    Hell = {0, _0x3fa1(130, 45, 40), _0x3fa1(80, 26, 24)},
+    NetherWorld = {0, _0x3fa1(110, 50, 60), _0x3fa1(68, 30, 38)},
+    Storm = {16, _0x3fa1(65, 70, 80), _0x3fa1(90, 96, 108)},
+    Blizzard = {13, _0x3fa1(210, 220, 235), _0x3fa1(225, 232, 245)},
+    Winter = {10, _0x3fa1(185, 200, 220), _0x3fa1(205, 218, 236)},
+    FlamingSunset = {17.6, _0x3fa1(175, 105, 70), _0x3fa1(215, 140, 95)},
+    Mountains = {10, _0x3fa1(125, 145, 160), _0x3fa1(165, 180, 195)},
+    RedNight = {18, _0x3fa1(160, 70, 70), _0x3fa1(110, 48, 50)},
+    Pink = {15, _0x3fa1(190, 130, 165), _0x3fa1(220, 165, 195)},
+    PurpleClouds = {14, _0x3fa1(150, 120, 180), _0x3fa1(185, 155, 210)},
+    BlueClouds = {13, _0x3fa1(135, 165, 200), _0x3fa1(180, 200, 225)},
+    Cloudy = {13, _0x3fa1(135, 140, 145), _0x3fa1(170, 176, 182)},
+    NewYork = {0, _0x3fa1(70, 72, 90), _0x3fa1(48, 50, 66)},
+    FPSBoost = {12, _0x3fa1(160, 160, 160), _0x3fa1(190, 190, 190)},
+    SolidBlack = {0, _0x3fa1(0, 0, 0), _0x3fa1(0, 0, 0)},
+}
+
+local function _0xSKY_NAMES()
+    local _0xt = {"Default"}
+    for _0xn in _0x6790(_0xSKY) do _0x4401(_0xt, _0xn) end
+    table.sort(_0xt)
+    return _0xt
+end
+
+local function _0xLIGHT_SAVE()
+    if _0xC.lorig then return end
+    _0xC.lorig = {
+        ct = _0xa4e6.ClockTime,
+        am = _0xa4e6.Ambient,
+        oa = _0xa4e6.OutdoorAmbient,
+        br = _0xa4e6.Brightness,
+        fe = _0xa4e6.FogEnd,
+        fs = _0xa4e6.FogStart,
+        fc = _0xa4e6.FogColor,
+        gs = _0xa4e6.GlobalShadows
+    }
+end
+
+local function _0xLIGHT_RESET()
+    local _0xo = _0xC.lorig
+    if not _0xo then return end
+    _0xbb44(function()
+        _0xa4e6.ClockTime = _0xo.ct
+        _0xa4e6.Ambient = _0xo.am
+        _0xa4e6.OutdoorAmbient = _0xo.oa
+        _0xa4e6.Brightness = _0xo.br
+        _0xa4e6.FogEnd = _0xo.fe
+        _0xa4e6.FogStart = _0xo.fs
+        _0xa4e6.FogColor = _0xo.fc
+        _0xa4e6.GlobalShadows = _0xo.gs
+    end)
+end
+
+local function _0xSKY_SET(_0xn)
+    local _0xmine = _0xFC(_0xa4e6, "FlamingoSky")
+    _0xLIGHT_SAVE()
+    if _0xn == "Default" then
+        if _0xmine then _0xbb44(function() _0xmine:Destroy() end) end
+        if _0xC.skyorig then
+            _0xbb44(function() _0xC.skyorig.Parent = _0xa4e6 end)
+            _0xC.skyorig = nil
+        end
+        _0xLIGHT_RESET()
+        return
+    end
+    local _0xd = _0xSKY[_0xn]
+    if not _0xd then return end
+    _0xbb44(function()
+        local _0xcur = _0xa4e6:FindFirstChildOfClass("Sky")
+        if _0xcur and _0xcur ~= _0xmine then
+            _0xC.skyorig = _0xcur
+            _0xcur.Parent = nil
+        end
+        local _0xs = _0xmine
+        if not _0xs then
+            _0xs = _0xee03("Sky")
+            _0xs.Name = "FlamingoSky"
+            _0xs.Parent = _0xa4e6
+        end
+        _0xs.SkyboxUp = "rbxassetid://" .. _0xd[1]
+        _0xs.SkyboxDn = "rbxassetid://" .. _0xd[2]
+        _0xs.SkyboxFt = "rbxassetid://" .. _0xd[3]
+        _0xs.SkyboxBk = "rbxassetid://" .. _0xd[4]
+        _0xs.SkyboxLf = "rbxassetid://" .. _0xd[5]
+        _0xs.SkyboxRt = "rbxassetid://" .. _0xd[6]
+        _0xs.StarCount = _0xd[7]
+        _0xs.SunAngularSize = _0xd[8]
+        _0xs.MoonAngularSize = _0xd[9]
+    end)
+    local _0xl = _0xSKYLIGHT[_0xn]
+    if _0xl and _0xSTATE._skl then
+        _0xbb44(function()
+            _0xa4e6.ClockTime = _0xl[1]
+            _0xa4e6.Ambient = _0xl[2]
+            _0xa4e6.OutdoorAmbient = _0xl[3]
+        end)
+    end
+end
+
+function _0xRIV.mk(_0xpl)
+    if _0xRIV._draw[_0xpl] then return _0xRIV._draw[_0xpl] end
+    local _0xd = {}
+    _0xd._b = Drawing.new("Square")
+    _0xd._b.Filled = false
+    _0xd._b.Visible = false
+    _0xd._hb = Drawing.new("Square")
+    _0xd._hb.Filled = true
+    _0xd._hb.Color = _0x3fa1(20, 20, 20)
+    _0xd._hb.Visible = false
+    _0xd._hf = Drawing.new("Square")
+    _0xd._hf.Filled = true
+    _0xd._hf.Visible = false
+    _0xd._n = Drawing.new("Text")
+    _0xd._n.Size = 13
+    _0xd._n.Center = true
+    _0xd._n.Outline = true
+    _0xd._n.Visible = false
+    _0xd._ds = Drawing.new("Text")
+    _0xd._ds.Size = 11
+    _0xd._ds.Center = true
+    _0xd._ds.Outline = true
+    _0xd._ds.Visible = false
+    _0xd._tr = Drawing.new("Line")
+    _0xd._tr.Thickness = 1
+    _0xd._tr.Visible = false
+    _0xRIV._draw[_0xpl] = _0xd
+    return _0xd
+end
+
+function _0xRIV.hide(_0xpl)
+    local _0xd = _0xRIV._draw[_0xpl]
+    if not _0xd then return end
+    for _, _0xo in _0x6790(_0xd) do _0xbb44(function() _0xo.Visible = false end) end
+end
+
+function _0xRIV.del(_0xpl)
+    local _0xd = _0xRIV._draw[_0xpl]
+    if not _0xd then return end
+    for _, _0xo in _0x6790(_0xd) do _0xbb44(function() _0xo:Remove() end) end
+    _0xRIV._draw[_0xpl] = nil
+end
+
+function _0xRIV.esp()
+    if not (_0xRSTATE._e2 or _0xRSTATE._e3 or _0xRSTATE._e4 or _0xRSTATE._e5 or _0xRSTATE._v1) then
+        for _0xp in _0x6790(_0xRIV._draw) do _0xRIV.hide(_0xp) end
+        return
+    end
+    local _0xcam = _0x91af.CurrentCamera
+    if not _0xcam then return end
+    local _0xvps = _0xcam.ViewportSize
+    local _0xlf = _0xRIV.me()
+    local _0xmr = _0xlf and _0xRIV.body(_0xlf)
+    if not _0xmr then
+        local _0xmc = _0x8ca5.Character
+        _0xmr = _0xmc and _0xFC(_0xmc, "HumanoidRootPart")
+    end
+    local _0xmp = _0xmr and _0xmr.Position
+    if not _0xmp then _0xmp = _0xcam.CFrame.Position end
+    local _0xlive = {}
+    for _, _0xf in _0x1248(_0xRIV.list()) do
+        local _0xkey = _0xf.Player or _0xf
+        _0xlive[_0xkey] = true
+        do
+            local _0xrt, _0xmd = _0xRIV.body(_0xf)
+            local _0xhrp = _0xrt and _0xrt.Position
+            local _0xhm = (_0xf.Entity and _0xf.Entity.Humanoid) or (_0xmd and _0xGH(_0xmd))
+            local _0xdt = (_0xmp and _0xhrp) and (_0xmp - _0xhrp).Magnitude or 0
+            if not _0xhrp or _0xdt > _0xRSTATE._e7 then
+                _0xRIV.hide(_0xkey)
+            else
+                local _0xd = _0xRIV.mk(_0xkey)
+                local _0xcl = _0xRFOE
+                local _0xtp, _0xov = _0xcam:WorldToViewportPoint(_0xhrp + _0x7ce2(0, 3, 0))
+                local _0xbp, _0xob = _0xcam:WorldToViewportPoint(_0xhrp - _0x7ce2(0, 4.5, 0))
+                if not _0xov or not _0xob then
+                    _0xRIV.hide(_0xkey)
+                else
+                    local _0xht = math.abs(_0xtp.Y - _0xbp.Y)
+                    local _0xwd = _0xht * 0.55
+                    local _0xcr = Vector2.new(_0xtp.X - _0xwd / 2, _0xtp.Y)
+
+                    if _0xRSTATE._e2 then
+                        _0xd._b.Size = Vector2.new(_0xwd, _0xht)
+                        _0xd._b.Position = _0xcr
+                        _0xd._b.Color = _0xRCOL.auto and _0xcl or (_0xRCOL.box or _0xcl)
+                        _0xd._b.Thickness = _0xRSTATE._e8
+                        _0xd._b.Visible = true
+                    else
+                        _0xd._b.Visible = false
+                    end
+
+                    if _0xRSTATE._e3 then
+                        _0xd._n.Position = Vector2.new(_0xtp.X, _0xcr.Y - 15)
+                        _0xd._n.Text = (typeof(_0xf.Player) == "Instance" and _0xf.Player.DisplayName) or "Enemy"
+                        _0xd._n.Color = _0xRCOL.auto and _0xcl or (_0xRCOL.name or _0xcl)
+                        _0xd._n.Visible = true
+                    else
+                        _0xd._n.Visible = false
+                    end
+
+                    if _0xRSTATE._e4 and _0xhm then
+                        local _0xpc = _0xc746(_0xhm.Health / math.max(_0xhm.MaxHealth, 1), 0, 1)
+                        local _0xbx = _0xcr.X - 5
+                        _0xd._hb.Position = Vector2.new(_0xbx - 1, _0xcr.Y - 1)
+                        _0xd._hb.Size = Vector2.new(4, _0xht + 2)
+                        _0xd._hb.Visible = true
+                        local _0xfh = math.max(1, _0xht * _0xpc)
+                        _0xd._hf.Position = Vector2.new(_0xbx, _0xcr.Y + (_0xht - _0xfh))
+                        _0xd._hf.Size = Vector2.new(2, _0xfh)
+                        _0xd._hf.Color = _0xRCOL.hp or _0xHPCOL(_0xpc)
+                        _0xd._hf.Visible = true
+                    else
+                        _0xd._hb.Visible = false
+                        _0xd._hf.Visible = false
+                    end
+
+                    if _0xRSTATE._e5 then
+                        _0xd._ds.Position = Vector2.new(_0xtp.X, _0xcr.Y + _0xht + 2)
+                        _0xd._ds.Text = _0x11bf(_0xdt) .. " studs"
+                        _0xd._ds.Color = _0xRCOL.dist or _0x3fa1(200, 200, 210)
+                        _0xd._ds.Visible = true
+                    else
+                        _0xd._ds.Visible = false
+                    end
+
+                    if _0xRSTATE._v1 then
+                        _0xd._tr.From = Vector2.new(_0xvps.X / 2, _0xvps.Y)
+                        _0xd._tr.To = Vector2.new(_0xtp.X, _0xcr.Y + _0xht)
+                        _0xd._tr.Color = _0xRCOL.auto and _0xcl or (_0xRCOL.tracer or _0xcl)
+                        _0xd._tr.Visible = true
+                    else
+                        _0xd._tr.Visible = false
+                    end
+                end
+            end
+        end
+    end
+    for _0xp in _0x6790(_0xRIV._draw) do
+        if not _0xlive[_0xp] then _0xRIV.hide(_0xp) end
+    end
+end
+
+function _0xRIV.chams()
+    if not _0xRSTATE._v2 then
+        for _0xp, _0xh in _0x6790(_0xRIV._hl) do
+            _0xbb44(function() _0xh:Destroy() end)
+            _0xRIV._hl[_0xp] = nil
+        end
+        return
+    end
+    local _0xseen = {}
+    for _, _0xf in _0x1248(_0xRIV.list()) do
+        do
+            local _, _0xmd = _0xRIV.body(_0xf)
+            local _0xpl = _0xf.Player or _0xf
+            if _0xmd then
+                _0xseen[_0xpl] = true
+                local _0xh = _0xRIV._hl[_0xpl]
+                if not _0xh or not _0xh.Parent then
+                    _0xh = _0xee03("Highlight")
+                    _0xh.OutlineTransparency = 0
+                    _0xh.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+                    _0xh.Parent = _0x60b2
+                    _0xRIV._hl[_0xpl] = _0xh
+                end
+                _0xbb44(function()
+                    _0xh.Adornee = _0xmd
+                    _0xh.FillColor = _0xRSTATE._vfc or _0xRFOE
+                    _0xh.OutlineColor = _0xRSTATE._voc or _0xRFOE
+                    _0xh.FillTransparency = _0xRSTATE._vf and _0xRSTATE._va or 1
+                    _0xh.OutlineTransparency = _0xRSTATE._vo and 0 or 1
+                end)
+            end
+        end
+    end
+    for _0xp, _0xh in _0x6790(_0xRIV._hl) do
+        if not _0xseen[_0xp] then
+            _0xbb44(function() _0xh:Destroy() end)
+            _0xRIV._hl[_0xp] = nil
+        end
+    end
+end
+
+function _0xRIV.ragebot(_0xon)
+    if _0xRIV._rage then _0xRIV._rage:Disconnect() _0xRIV._rage = nil end
+    if not _0xon then return end
+    _0xRIV._rage = _0x55c0.Heartbeat:Connect(function()
+        if not _0xRSTATE._rg then return end
+        if not _0xKEY("riv_rage_key") then return end
+        local _0xnow = _0x8891()
+        if _0xnow - _0xRIV._rat < 1 / _0xc746(_0xRSTATE._rr, 1, 20) then return end
+        local _0xpt = _0xRIV.ragetarget()
+        if not _0xpt then return end
+        _0xRIV._rat = _0xnow
+        _0xRIV.fireat(_0xpt)
+    end)
+end
+
+function _0xRIV.aimpart(_0xf)
+    if type(_0xf) ~= "table" then return nil end
+    local _0xpl = _0xf.Player
+    if typeof(_0xpl) == "Instance" then
+        local _0xcp = _0xRIV.charpart(_0xpl, _0xRSTATE._c6)
+        if _0xcp then return _0xcp end
+    end
+    local _0xr, _0xm = _0xRIV.body(_0xf)
+    if not _0xr or not _0xr.Parent then return nil end
+    if _0xm then
+        local _0xp = _0xFC(_0xm, _0xRSTATE._c6)
+        if _0xp then return _0xp end
+    end
+    return _0xr
+end
+
+function _0xRIV.target()
+    local _0xcam = _0x91af.CurrentCamera
+    if not _0xcam then return nil end
+    local _0xvps = _0xcam.ViewportSize
+    local _0xctr = Vector2.new(_0xvps.X / 2, _0xvps.Y / 2)
+    local _0xorg = _0xcam.CFrame.Position
+    if _0xRSTATE._c9 and _0xRIV._lp and _0xRIV.valid(_0xRIV._lp) then
+        local _0xlk = _0xRIV.aimpart(_0xRIV._lp)
+        if _0xlk and (_0xlk.Position - _0xorg).Magnitude <= _0xRSTATE._cd then return _0xlk end
+    end
+    _0xRIV._lp = nil
+    local _0xbest, _0xbs, _0xbf = nil, nil, nil
+    for _, _0xf in _0x1248(_0xRIV.list()) do
+        local _0xpt = _0xRIV.aimpart(_0xf)
+        if _0xpt then
+            local _0xdist = (_0xpt.Position - _0xorg).Magnitude
+            if _0xdist <= _0xRSTATE._cd then
+                local _0xsp, _0xon = _0xcam:WorldToViewportPoint(_0xpt.Position)
+                if _0xon then
+                    local _0xd2 = (Vector2.new(_0xsp.X, _0xsp.Y) - _0xctr).Magnitude
+                    if _0xd2 <= _0xRSTATE._c2 then
+                        local _0xsc = _0xd2
+                        if _0xRSTATE._cq == "Distance" then _0xsc = _0xdist end
+                        if not _0xbs or _0xsc < _0xbs then _0xbs = _0xsc _0xbest = _0xpt _0xbf = _0xf end
+                    end
+                end
+            end
+        end
+    end
+    _0xRIV._lp = _0xbf
+    return _0xbest
+end
+
+function _0xRIV.ragetarget()
+    local _0xcam = _0x91af.CurrentCamera
+    if not _0xcam then return nil end
+    local _0xorg = _0xcam.CFrame.Position
+    local _0xbest, _0xbs = nil, nil
+    for _, _0xf in _0x1248(_0xRIV.list()) do
+        local _0xpt = _0xRIV.aimpart(_0xf)
+        if _0xpt then
+            local _0xdist = (_0xpt.Position - _0xorg).Magnitude
+            if _0xdist <= _0xRSTATE._cd and (not _0xbs or _0xdist < _0xbs) then
+                _0xbs = _0xdist
+                _0xbest = _0xpt
+            end
+        end
+    end
+    return _0xbest
+end
+
+function _0xRIV.aimbot(_0xon)
+    if _0xRIV._aim then _0xRIV._aim:Disconnect() _0xRIV._aim = nil end
+    if not _0xon then return end
+    _0xRIV._aim = _0x55c0.RenderStepped:Connect(function()
+        if not _0xRSTATE._c1 then return end
+        if not _0xKEY("riv_aim_key") then
+            _0xRIV._lp = nil
+            return
+        end
+        if _0xRSTATE._c3 < 100 and _0xd200(1, 100) > _0xRSTATE._c3 then return end
+        local _0xtg = _0xRIV.target()
+        if not _0xtg then return end
+        local _0xcam = _0x91af.CurrentCamera
+        if not _0xcam then return end
+        local _0xaim = _0xLEAD(_0xtg, _0xRSTATE._cp, _0xRSTATE._cv)
+        if not _0xaim then return end
+        local _0xgoal = _0x4b58(_0xcam.CFrame.Position, _0xaim)
+        _0xcam.CFrame = _0xcam.CFrame:Lerp(_0xgoal, _0xc746(_0xRSTATE._c7, 0.05, 1))
+    end)
+end
+
+function _0xRIV.fovdraw()
+    if not _0xRSTATE._c5 then
+        if _0xRIV._fov then _0xRIV._fov.Visible = false end
+        return
+    end
+    if not _0xRIV._fov then
+        _0xRIV._fov = Drawing.new("Circle")
+        _0xRIV._fov.Thickness = 1
+        _0xRIV._fov.NumSides = 64
+        _0xRIV._fov.Filled = false
+        _0xRIV._fov.Color = _0x3fa1(255, 255, 255)
+    end
+    local _0xcam = _0x91af.CurrentCamera
+    if not _0xcam then return end
+    local _0xvps = _0xcam.ViewportSize
+    _0xRIV._fov.Position = Vector2.new(_0xvps.X / 2, _0xvps.Y / 2)
+    _0xRIV._fov.Radius = _0xRSTATE._c2
+    _0xRIV._fov.Visible = true
+end
+
+function _0xRIV.scan()
+    if _0xRIV._pdone then return end
+    _0xRIV.req()
+    local _0xil = _0xRIV._il
+    if not _0xil or type(_0xil.Items) ~= "table" then return end
+    _0xRIV._pdone = true
+    local _0xseen = {}
+    local function _0xadd(_0xt, _0xk, _0xkind)
+        local _0xv = rawget(_0xt, _0xk)
+        if _0xv == nil then return end
+        local _0xty = typeof(_0xv)
+        if type(_0xv) ~= "number" and _0xty ~= "Vector2" and _0xty ~= "Vector3" then return end
+        _0xseen[_0xt] = _0xseen[_0xt] or {}
+        if _0xseen[_0xt][_0xk] then return end
+        _0xseen[_0xt][_0xk] = true
+        _0x4401(_0xRIV._patch, {t = _0xt, k = _0xk, o = _0xv, kind = _0xkind})
+    end
+    for _, _0xt in _0x6790(_0xil.Items) do
+        if type(_0xt) == "table" and _0xt.Type == "Gun" then
+            _0xadd(_0xt, "ShootRecoil", "recoil")
+            _0xadd(_0xt, "ShootCameraDisplacementRecoil", "recoil")
+            for _, _0xk in _0x1248({"ShootSpread", "ShootSpreadPerVelocityUnit", "ShootSpreadPerVelocityLimit"}) do
+                _0xadd(_0xt, _0xk, "spread")
+            end
+            _0xadd(_0xt, "ShootCooldown", "rate")
+            _0xadd(_0xt, "BurstCooldown", "rate")
+            if type(_0xt.ReloadFiles) == "table" then
+                for _, _0xfs in _0x6790(_0xt.ReloadFiles) do
+                    if type(_0xfs) == "table" then
+                        for _, _0xf in _0x6790(_0xfs) do
+                            if type(_0xf) == "table" then _0xadd(_0xf, "Length", "reload") end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+function _0xRIV.apply()
+    _0xRIV.scan()
+    for _, _0xp in _0x1248(_0xRIV._patch) do
+        local _0xv = _0xp.o
+        if _0xp.kind == "spread" and _0xRSTATE._c4 then
+            _0xv = _0xp.o * 0
+        elseif _0xp.kind == "recoil" and _0xRSTATE._cr then
+            _0xv = _0xp.o * 0
+        elseif _0xp.kind == "rate" and _0xRSTATE._cf then
+            _0xv = _0xp.o / _0xc746(_0xRSTATE._cfr, 1, 10)
+        elseif _0xp.kind == "reload" and _0xRSTATE._cl then
+            _0xv = _0xp.o / _0xc746(_0xRSTATE._clr, 1, 10)
+        end
+        _0xbb44(function() _0xp.t[_0xp.k] = _0xv end)
+    end
+end
+
+function _0xRIV.aimpoint(_0xpart)
+    local _0xv = _0xVEL(_0xpart)
+    if not _0xRSTATE._cv then _0xv = Vector3.new(_0xv.X, 0, _0xv.Z) end
+    local _0xl = _0xv * (_0xRSTATE._cp or 0)
+    if _0xl.Magnitude > _0xRSTATE._cm then _0xl = _0xl.Unit * _0xRSTATE._cm end
+    return _0xpart.Position + _0xl
+end
+
+function _0xRIV.redirect(_0xdata, _0xpart)
+    if type(_0xdata) ~= "table" then return _0xdata end
+    local _0xk1, _0xk2, _0xk3 = string.char(1), string.char(2), string.char(3)
+    if typeof(_0xdata[_0xk1]) ~= "CFrame" then return _0xdata end
+    if not _0xpart or not _0xpart.Parent then return _0xdata end
+    local _0xcd = table.clone(_0xdata)
+    local _0xpoint = _0xRIV.aimpoint(_0xpart)
+    local _0xorigin = _0xdata[_0xk1].Position
+    if (_0xpoint - _0xorigin).Magnitude < 0.001 then return _0xdata end
+    _0xcd[_0xk1] = CFrame.lookAt(_0xorigin, _0xpoint)
+    _0xcd[_0xk2] = _0xpart
+    _0xcd[_0xk3] = _0xpart.CFrame:ToObjectSpace(CFrame.new(_0xpoint))
+    return _0xcd
+end
+
+function _0xRIV.hookfire()
+    if _0xRIV._unhook then return end
+    _0xRIV.req()
+    local _0xui = _0xRIV._ui
+    if not _0xui or type(hookfunction) ~= "function" or type(newcclosure) ~= "function" then return end
+    local _0xshoot = nil
+    _0xbb44(function() _0xshoot = _0xRIV._en:ToEnum("StartShooting") end)
+    if not _0xshoot then return end
+
+    local _0xold
+    _0xold = hookfunction(_0xui.FireServer, newcclosure(function(_0xself, _0xoid, _0xact, _0xcam, ...)
+        if _0xact ~= _0xshoot or _0xself ~= _0xui then return _0xold(_0xself, _0xoid, _0xact, _0xcam, ...) end
+        if not _0xRSTATE._sa or not _0xKEY("riv_silent_key") then return _0xold(_0xself, _0xoid, _0xact, _0xcam, ...) end
+        if _0xRSTATE._sc < 100 and _0xd200(1, 100) > _0xRSTATE._sc then return _0xold(_0xself, _0xoid, _0xact, _0xcam, ...) end
+        local _0xpt = _0xRIV.target()
+        if not _0xpt then return _0xold(_0xself, _0xoid, _0xact, _0xcam, ...) end
+        local _0xc = _0x91af.CurrentCamera
+        local _0xfrom = _0xc and _0xc.CFrame.Position or _0xpt.Position
+        local _0xnew = _0xRIV.camdata(_0xfrom, _0xpt)
+        return _0xold(_0xself, _0xoid, _0xact, _0xnew or _0xcam, ...)
+    end))
+
+    _0xRIV._unhook = function()
+        _0xbb44(function() hookfunction(_0xui.FireServer, _0xold) end)
+        _0xRIV._unhook = nil
+    end
+end
+
+function _0xRIV.fireat(_0xpt)
+    _0xRIV.req()
+    local _0xui = _0xRIV._ui
+    local _0xf = _0xRIV.me()
+    local _0xit = _0xf and _0xf.EquippedItem
+    if not _0xui or not _0xit or not _0xpt then return false end
+    local _0xshoot = nil
+    _0xbb44(function() _0xshoot = _0xRIV._en:ToEnum("StartShooting") end)
+    if not _0xshoot then return false end
+    local _0xammo = 0
+    _0xbb44(function() _0xammo = _0xit:Get("Ammo") or 0 end)
+    if _0xammo <= 0 then return false end
+    local _0xoid = nil
+    _0xbb44(function() _0xoid = _0xit:Get("ObjectID") end)
+    if not _0xoid then return false end
+    local _0xc = _0x91af.CurrentCamera
+    local _0xfrom = _0xc and _0xc.CFrame.Position or _0xpt.Position
+    local _0xd = _0xRIV.camdata(_0xfrom, _0xpt)
+    if not _0xd then return false end
+    local _0xok = _0xbb44(function() _0xui:FireServer(_0xoid, _0xshoot, _0xd, nil) end)
+    return _0xok
+end
+
+function _0xRIV.pov(_0xon)
+    _0xTHIRD(_0xon)
+    _0xRIV.req()
+    local _0xc = _0xRIV._cc
+    if not _0xc then return end
+    _0xbb44(function()
+        if _0xon and _0xc.CameraState and _0xc.CameraState:GetPublicState() ~= _0xc.CameraState.States.ThirdPerson then
+            _0xc.CameraState:TogglePOV()
+        end
+        _0xc:SetThirdPersonOverride(_0xon and true or false)
+    end)
+end
+
+function _0xRIV.startloops()
+    if _0xRIV._loops then return end
+    _0xRIV._loops = true
+    _0x39fd(function()
+        while _0xabc0(0.5) do
+            if _0xRSTATE._aa then
+                local _0xrm = _0xRIV.remotes()
+                if _0xrm then
+                    _0xbb44(function() _0xrm.Replication.Fighter.SetControls:FireServer(_0xf5c3(_0xRSTATE._ab)) end)
+                end
+            end
+        end
+    end)
+    _0x39fd(function()
+        while _0xabc0(1) do
+            if _0xRSTATE._a3 then
+                local _0xrm = _0xRIV.remotes()
+                if _0xrm then
+                    _0xbb44(function() _0xrm.Duels.Vote:FireServer(_0xf5c3(_0xRSTATE._a4)) end)
+                end
+            end
+        end
+    end)
+    _0x39fd(function()
+        while _0xabc0(2) do
+            if _0xRSTATE._a1 then
+                local _0xrm = _0xRIV.remotes()
+                if _0xrm then
+                    _0xbb44(function() _0xrm.Matchmaking.JoinQueue:InvokeServer(_0xf5c3(_0xRSTATE._a2)) end)
+                end
+            end
+        end
+    end)
+    _0x39fd(function()
+        while _0xabc0(2.5) do
+            if _0xRSTATE._a5 then
+                local _0xrm = _0xRIV.remotes()
+                if _0xrm then
+                    _0xbb44(function()
+                        _0xrm.Replication.Fighter.PickWeapons:FireServer({
+                            _0xf5c3(_0xRSTATE._a6), _0xf5c3(_0xRSTATE._a7),
+                            _0xf5c3(_0xRSTATE._a8), _0xf5c3(_0xRSTATE._a9)
+                        })
+                    end)
+                end
+            end
+        end
+    end)
+    _0x39fd(function()
+        while _0xabc0(2) do
+            _0xbb44(_0xRIV.chams)
+        end
+    end)
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+local _0xASTATE = {
+    _t1 = false, _t2 = "Head", _t3 = 120, _t4 = true, _t5 = 0.3,
+    _t7 = false, _t8 = 1500, _t9 = false, _ta = 0.05, _tb = false,
+    _tp = 0, _tv = false, _tc = 0, _td = "Crosshair",
+}
+
+local _0xAR = {_aim = nil, _trig = nil, _fov = nil, _at = 0, _rp = nil, _lp = nil}
+
+function _0xAR.foe(_0xpl)
+    if _0xpl == _0x8ca5 then return false end
+    if not _0xASTATE._t4 then return true end
+    local _0xmt, _0xtt = _0x8ca5.Team, _0xpl.Team
+    if _0xmt and _0xtt and _0xmt == _0xtt then return false end
+    return true
+end
+
+function _0xAR.live(_0xpl)
+    local _0xch = _0xpl.Character
+    local _0xhm = _0xch and _0xGH(_0xch)
+    if not _0xhm or _0xhm.Health <= 0 then return nil end
+    return _0xch
+end
+
+function _0xAR.vis(_0xpt)
+    if not _0xASTATE._t9 then return true end
+    local _0xmd = _0xpt and _0xpt.Parent
+    if not _0xmd then return false end
+    local _0xcam = _0x91af.CurrentCamera
+    if not _0xcam then return true end
+    if not _0xAR._rp then
+        _0xAR._rp = RaycastParams.new()
+        _0xAR._rp.FilterType = Enum.RaycastFilterType.Exclude
+    end
+    local _0xign = {_0x8ca5.Character}
+    _0xAR._rp.FilterDescendantsInstances = _0xign
+    local _0xorg = _0xcam.CFrame.Position
+    local _0xdir = _0xpt.Position - _0xorg
+    local _0xrs = _0x91af:Raycast(_0xorg, _0xdir, _0xAR._rp)
+    if not _0xrs then return true end
+    return _0xrs.Instance:IsDescendantOf(_0xmd)
+end
+
+function _0xAR.aimpart(_0xpl)
+    if not _0xpl or not _0xpl.Parent then return nil end
+    local _0xch = _0xAR.live(_0xpl)
+    if not _0xch then return nil end
+    return _0xFC(_0xch, _0xASTATE._t2) or _0xFC(_0xch, "HumanoidRootPart")
+end
+
+function _0xAR.target()
+    local _0xcam = _0x91af.CurrentCamera
+    if not _0xcam then return nil end
+    local _0xvps = _0xcam.ViewportSize
+    local _0xctr = Vector2.new(_0xvps.X / 2, _0xvps.Y / 2)
+    local _0xorg = _0xcam.CFrame.Position
+    if _0xASTATE._tb and _0xAR._lp then
+        local _0xlk = _0xAR.aimpart(_0xAR._lp)
+        if _0xlk and _0xAR.foe(_0xAR._lp) and (_0xlk.Position - _0xorg).Magnitude <= _0xASTATE._t8 then
+            return _0xlk
+        end
+        _0xAR._lp = nil
+    end
+    local _0xbest, _0xbs, _0xbpl = nil, nil, nil
+    for _, _0xpl in _0x1248(_0xGP()) do
+        if _0xAR.foe(_0xpl) then
+            local _0xpt = _0xAR.aimpart(_0xpl)
+            local _0xch = _0xpt and _0xpt.Parent
+            local _0xhm = _0xch and _0xGH(_0xch)
+            local _0xhp = _0xhm and (_0xhm.Health / math.max(_0xhm.MaxHealth, 1) * 100) or 100
+            if _0xpt and _0xhp >= _0xASTATE._tc and (_0xpt.Position - _0xorg).Magnitude <= _0xASTATE._t8 then
+                local _0xsp, _0xon = _0xcam:WorldToViewportPoint(_0xpt.Position)
+                if _0xon then
+                    local _0xd2 = (Vector2.new(_0xsp.X, _0xsp.Y) - _0xctr).Magnitude
+                    if _0xd2 <= _0xASTATE._t3 and _0xAR.vis(_0xpt) then
+                        local _0xsc = _0xd2
+                        if _0xASTATE._td == "Distance" then
+                            _0xsc = (_0xpt.Position - _0xorg).Magnitude
+                        elseif _0xASTATE._td == "Lowest Health" then
+                            _0xsc = _0xhp
+                        end
+                        if not _0xbs or _0xsc < _0xbs then _0xbs = _0xsc _0xbest = _0xpt _0xbpl = _0xpl end
+                    end
+                end
+            end
+        end
+    end
+    _0xAR._lp = _0xbpl
+    return _0xbest
+end
+
+function _0xAR.aimbot(_0xon)
+    if _0xAR._aim then _0xAR._aim:Disconnect() _0xAR._aim = nil end
+    if not _0xon then return end
+    _0xAR._aim = _0x55c0.RenderStepped:Connect(function()
+        if not _0xASTATE._t1 then return end
+        if not _0xKEY("ar_aim_key") then
+            _0xAR._lp = nil
+            return
+        end
+        local _0xpt = _0xAR.target()
+        if not _0xpt then return end
+        local _0xcam = _0x91af.CurrentCamera
+        if not _0xcam then return end
+        local _0xaim = _0xLEAD(_0xpt, _0xASTATE._tp, _0xASTATE._tv)
+        if not _0xaim then return end
+        local _0xgoal = _0x4b58(_0xcam.CFrame.Position, _0xaim)
+        _0xcam.CFrame = _0xcam.CFrame:Lerp(_0xgoal, _0xc746(_0xASTATE._t5, 0.05, 1))
+    end)
+end
+
+function _0xAR.trigger(_0xon)
+    if _0xAR._trig then _0xAR._trig:Disconnect() _0xAR._trig = nil end
+    if not _0xon then return end
+    _0xAR._trig = _0x55c0.Heartbeat:Connect(function()
+        if not _0xASTATE._t7 then return end
+        if not _0xKEY("ar_trig_key") then return end
+        if type(mouse1click) ~= "function" then return end
+        local _0xnow = _0x8891()
+        if _0xnow - _0xAR._at < _0xc746(_0xASTATE._ta, 0.02, 1) then return end
+        local _0xcam = _0x91af.CurrentCamera
+        if not _0xcam then return end
+        if not _0xAR._rp then
+            _0xAR._rp = RaycastParams.new()
+            _0xAR._rp.FilterType = Enum.RaycastFilterType.Exclude
+        end
+        _0xAR._rp.FilterDescendantsInstances = {_0x8ca5.Character}
+        local _0xorg = _0xcam.CFrame.Position
+        local _0xrs = _0x91af:Raycast(_0xorg, _0xcam.CFrame.LookVector * _0xASTATE._t8, _0xAR._rp)
+        if not _0xrs then return end
+        local _0xmd = _0xrs.Instance:FindFirstAncestorOfClass("Model")
+        if not _0xmd then return end
+        local _0xpl = _0xb8c1:GetPlayerFromCharacter(_0xmd)
+        if not _0xpl or not _0xAR.foe(_0xpl) or not _0xAR.live(_0xpl) then return end
+        _0xAR._at = _0xnow
+        _0xbb44(function() mouse1click() end)
+    end)
+end
+
+function _0xAR.fovdraw()
+    if not _0xASTATE._t1 then
+        if _0xAR._fov then _0xAR._fov.Visible = false end
+        return
+    end
+    if not _0xAR._fov then
+        _0xAR._fov = Drawing.new("Circle")
+        _0xAR._fov.Thickness = 1
+        _0xAR._fov.NumSides = 64
+        _0xAR._fov.Filled = false
+        _0xAR._fov.Color = _0x3fa1(255, 255, 255)
+    end
+    local _0xcam = _0x91af.CurrentCamera
+    if not _0xcam then return end
+    local _0xvps = _0xcam.ViewportSize
+    _0xAR._fov.Position = Vector2.new(_0xvps.X / 2, _0xvps.Y / 2)
+    _0xAR._fov.Radius = _0xASTATE._t3
+    _0xAR._fov.Visible = true
+end
+
+_0x55c0.RenderStepped:Connect(function()
+    _0xFPS.n = _0xFPS.n + 1
+    _0xbb44(_0xESP)
+    if _0xSTATE._h5 then _0xbb44(_0xFOV_DRAW) end
+    if _0xSTATE._h11 or _0xC.afovc then _0xbb44(_0xAFOV_DRAW) end
+    _0xbb44(_0xRIV.esp)
+    if _0xRSTATE._c5 or _0xRIV._fov then _0xbb44(_0xRIV.fovdraw) end
+    if _0xASTATE._t1 or _0xAR._fov then _0xbb44(_0xAR.fovdraw) end
+end)
+
+_0x39fd(function()
+    while _0xabc0(2) do
+        _0xbb44(_0xCHAMS)
+        _0xbb44(_0xGUN_ESP)
+    end
+end)
+
+_0xb8c1.PlayerRemoving:Connect(function(_0xpl)
+    _0xRMDRAW(_0xpl)
+    _0xRIV.del(_0xpl)
+    if _0xHL[_0xpl] then
+        _0xbb44(function() _0xHL[_0xpl]:Destroy() end)
+        _0xHL[_0xpl] = nil
+    end
+    if _0xRIV._hl[_0xpl] then
+        _0xbb44(function() _0xRIV._hl[_0xpl]:Destroy() end)
+        _0xRIV._hl[_0xpl] = nil
+    end
+end)
+
+_0xLIB:OnUnload(function()
+    _0xRSTATE._e2 = false
+    _0xRSTATE._e3 = false
+    _0xRSTATE._e4 = false
+    _0xRSTATE._e5 = false
+    _0xRSTATE._v1 = false
+    _0xRSTATE._c1 = false
+    _0xRSTATE._c5 = false
+    _0xRSTATE._v2 = false
+    _0xRIV.aimbot(false)
+    _0xRIV.ragebot(false)
+    _0xbb44(function() _0xSKY_SET("Default") end)
+    _0xRSTATE._rg = false
+    _0xRSTATE._c4 = false
+    _0xRSTATE._cr = false
+    _0xRSTATE._cf = false
+    _0xRSTATE._cl = false
+    _0xRSTATE._sa = false
+    _0xbb44(function() _0xRIV.apply() end)
+    if _0xRIV._unhook then _0xbb44(_0xRIV._unhook) end
+    for _0xp in _0x6790(_0xRIV._draw) do _0xRIV.del(_0xp) end
+    for _0xp, _0xh in _0x6790(_0xRIV._hl) do
+        _0xbb44(function() _0xh:Destroy() end)
+        _0xRIV._hl[_0xp] = nil
+    end
+    if _0xRIV._fov then _0xbb44(function() _0xRIV._fov:Remove() end) _0xRIV._fov = nil end
+    _0xTHIRD(false)
+    _0xASTATE._t1 = false
+    _0xASTATE._t7 = false
+    _0xAR.aimbot(false)
+    _0xAR.trigger(false)
+    if _0xAR._fov then _0xbb44(function() _0xAR._fov:Remove() end) _0xAR._fov = nil end
+end)
+
+do
+    local _0xS1 = _0xT1:AddGroupbox({Side = "Left", Name = "Player ESP", IconName = "eye"})
+
+    _0xS1:AddToggle("esp_on", {
+        Text = "Enable ESP",
+        Default = false,
+        Callback = function(_0xv)
+            _0xSTATE._e1 = _0xv
+            if not _0xv then
+                for _0xp, _ in _0x6790(_0xDRAW) do _0xHIDE(_0xp) end
+            end
+        end
+    })
+
+    _0xS1:AddToggle("esp_box", {Text = "Show Box", Default = false, Callback = function(_0xv) _0xSTATE._e8 = _0xv end})
+    _0xS1:AddToggle("esp_name", {Text = "Show Name", Default = false, Callback = function(_0xv) _0xSTATE._e9 = _0xv end})
+    _0xS1:AddToggle("esp_dist", {Text = "Distance", Default = false, Callback = function(_0xv) _0xSTATE._eb = _0xv end})
+    _0xS1:AddToggle("esp_tracer", {Text = "Tracers", Default = false, Callback = function(_0xv) _0xSTATE._ec = _0xv end})
+    _0xS1:AddSlider("esp_maxd", {Text = "Max Distance", Default = 1000, Min = 50, Max = 2000, Rounding = 0, Callback = function(_0xv) _0xSTATE._e3 = _0xv end})
+    _0xS1:AddSlider("esp_thick", {Text = "Box Thickness", Default = 1, Min = 1, Max = 5, Rounding = 0, Callback = function(_0xv) _0xSTATE._ea = _0xv end})
+
+    local _0xS1b = _0xT1:AddGroupbox({Side = "Left", Name = "Filters", IconName = "filter"})
+    _0xS1b:AddToggle("flt_murd", {Text = "Murderer", Default = true, Callback = function(_0xv) _0xSTATE._e4 = _0xv end})
+    _0xS1b:AddToggle("flt_sher", {Text = "Sheriff", Default = true, Callback = function(_0xv) _0xSTATE._e5 = _0xv end})
+    _0xS1b:AddToggle("flt_hero", {Text = "Hero", Default = true, Callback = function(_0xv) _0xSTATE._e6 = _0xv end})
+    _0xS1b:AddToggle("flt_inno", {Text = "Innocent", Default = true, Callback = function(_0xv) _0xSTATE._e7 = _0xv end})
+
+    local _0xS1c = _0xT1:AddGroupbox({Side = "Right", Name = "Colors", IconName = "palette"})
+    _0xS1c:AddLabel({Text = "Murderer"}):AddColorPicker("col_murd", {
+        Default = _0xCOLORS.Murderer,
+        Title = "Murderer",
+        Callback = function(_0xv) _0xCOLORS.Murderer = _0xv end
+    })
+    _0xS1c:AddLabel({Text = "Sheriff"}):AddColorPicker("col_sher", {
+        Default = _0xCOLORS.Sheriff,
+        Title = "Sheriff",
+        Callback = function(_0xv) _0xCOLORS.Sheriff = _0xv end
+    })
+    _0xS1c:AddLabel({Text = "Hero"}):AddColorPicker("col_hero", {
+        Default = _0xCOLORS.Hero,
+        Title = "Hero",
+        Callback = function(_0xv) _0xCOLORS.Hero = _0xv end
+    })
+    _0xS1c:AddLabel({Text = "Innocent"}):AddColorPicker("col_inno", {
+        Default = _0xCOLORS.Innocent,
+        Title = "Innocent",
+        Callback = function(_0xv) _0xCOLORS.Innocent = _0xv end
+    })
+    _0xS1c:AddToggle("col_auto", {Text = "Use Role Colors", Default = true, Callback = function(_0xv) _0xECOL.auto = _0xv end})
+    _0xMKCOL(_0xS1c, "col_box", "Box", _0x3fa1(255, 255, 255), function(_0xv) _0xECOL.box = _0xv end)
+    _0xMKCOL(_0xS1c, "col_name", "Name", _0x3fa1(255, 255, 255), function(_0xv) _0xECOL.name = _0xv end)
+    _0xMKCOL(_0xS1c, "col_dist", "Distance", _0x3fa1(200, 200, 210), function(_0xv) _0xECOL.dist = _0xv end)
+    _0xMKCOL(_0xS1c, "col_tracer", "Tracer", _0x3fa1(255, 255, 255), function(_0xv) _0xECOL.tracer = _0xv end)
+    _0xMKCOL(_0xS1c, "col_role", "Role Tag", _0x3fa1(255, 255, 255), function(_0xv) _0xECOL.role = _0xv end)
+    _0xS1c:AddSlider("chams_alpha",{Text = "Chams Fill", Default = 0.5, Min = 0, Max = 1, Rounding = 2, Callback = function(_0xv) _0xSTATE._hc = _0xv end})
+
+    local _0xS2 = _0xT1:AddGroupbox({Side = "Right", Name = "World", IconName = "globe"})
+    _0xS2:AddToggle("chams_on", {Text = "Chams", Default = false, Callback = function(_0xv) _0xSTATE._h1 = _0xv _0xCHAMS() end})
+    _0xS2:AddToggle("gun_esp", {Text = "Gun ESP", Default = false, Callback = function(_0xv) _0xSTATE._h3 = _0xv _0xGUN_ESP() end})
+    _0xS2:AddToggle("fullbright", {Text = "Fullbright", Default = false, Callback = function(_0xv) _0xFBRIGHT(_0xv) end})
+    _0xS2:AddSlider("cam_fov", {Text = "Camera FOV", Default = 70, Min = 30, Max = 120, Rounding = 0, Callback = function(_0xv) _0xFOV_SET(_0xv) end})
+end
+
+do
+    local _0xS3 = _0xT2:AddGroupbox({Side = "Left", Name = "Character", IconName = "person-standing"})
+    _0xS3:AddToggle("speed_on", {Text = "Speed Hack", Default = false, Callback = function(_0xv) _0xSTATE._g1 = _0xv _0xSPD() end})
+    _0xS3:AddSlider("speed_val", {Text = "Walk Speed", Default = 16, Min = 16, Max = 200, Rounding = 0, Callback = function(_0xv) _0xSTATE._g7 = _0xv end})
+    _0xS3:AddToggle("jump_on", {Text = "Jump Power", Default = false, Callback = function(_0xv) _0xSTATE._g2 = _0xv _0xJMP() end})
+    _0xS3:AddSlider("jump_val", {Text = "Jump Value", Default = 50, Min = 50, Max = 300, Rounding = 0, Callback = function(_0xv) _0xSTATE._g8 = _0xv end})
+    _0xS3:AddToggle("infjump", {Text = "Infinite Jump", Default = false, Callback = function(_0xv) _0xSTATE._g3 = _0xv _0xINFJ() end})
+    _0xS3:AddToggle("noclip", {Text = "Noclip", Default = false, Callback = function(_0xv) _0xSTATE._g4 = _0xv _0xNCLIP(_0xv) end})
+    _0xS3:AddToggle("antifling_on", {Text = "Anti-Fling", Default = false, Callback = function(_0xv) _0xSTATE._a8 = _0xv _0xANTIFLING(_0xv) end})
+
+    local _0xS3b = _0xT2:AddGroupbox({Side = "Right", Name = "Flight", IconName = "plane"})
+    _0xS3b:AddToggle("fly_on", {Text = "Fly", Default = false, Callback = function(_0xv) _0xSTATE._g5 = _0xv _0xFLY(_0xv) end})
+    _0xS3b:AddSlider("fly_spd", {Text = "Fly Speed", Default = 60, Min = 10, Max = 300, Rounding = 0, Callback = function(_0xv) _0xSTATE._g9 = _0xv end})
+    _0xS3b:AddToggle("spin_on", {Text = "Spin", Default = false, Callback = function(_0xv) _0xSTATE._a4 = _0xv _0xSPIN(_0xv) end})
+    _0xS3b:AddSlider("spin_speed", {Text = "Spin Speed", Default = 1, Min = 1, Max = 20, Rounding = 0, Callback = function(_0xv) _0xSTATE._a5 = _0xv end})
+    _0xS3b:AddSlider("gravity_val", {Text = "Gravity", Default = 196, Min = 5, Max = 400, Rounding = 0, Callback = function(_0xv) _0xGRAVITY(_0xv) end})
+end
+
+do
+    local _0xS3c = _0xT2:AddGroupbox({Side = "Left", Name = "Wallhop", IconName = "zap"})
+    _0xS3c:AddToggle("wallhop_on", {Text = "Wallhop", Default = false, Callback = function(_0xv) _0xSTATE._wf = _0xv if _0xv then _0xWALLHOP(true) else _0xWALLHOP(false) end end})
+    _0xS3c:AddSlider("flick_angle", {Text = "Flick Angle", Default = 90, Min = 30, Max = 180, Rounding = 0, Callback = function(_0xv) _0xSTATE._wfa = _0xv end})
+end
+
+do
+    local _0xS4 = _0xT3:AddGroupbox({Side = "Left", Name = "Silent Aim", IconName = "crosshair"})
+    _0xS4:AddToggle("saim_on", {Text = "Enable Silent Aim", Default = false, Callback = function(_0xv) _0xSTATE._h4 = _0xv end})
+    _0xMKKEY(_0xS4, "saim_key", "Silent Aim")
+    _0xS4:AddSlider("hit_chance", {Text = "Hit Chance %", Default = 100, Min = 1, Max = 100, Rounding = 0, Callback = function(_0xv) _0xSTATE._h7 = _0xv end})
+    _0xS4:AddToggle("fov_vis", {Text = "FOV Circle", Default = false, Callback = function(_0xv) _0xSTATE._h5 = _0xv if _0xC.fovc then _0xC.fovc.Visible = _0xv end end})
+    _0xS4:AddSlider("fov_rad", {Text = "FOV Radius", Default = 120, Min = 10, Max = 500, Rounding = 0, Callback = function(_0xv) _0xSTATE._h6 = _0xv end})
+    _0xS4:AddToggle("aim_murd", {Text = "Murderer Only", Default = false, Callback = function(_0xv) _0xSTATE._k1 = _0xv end})
+    _0xS4:AddToggle("autoshoot_on", {Text = "Auto Shoot", Default = false, Callback = function(_0xv) _0xSTATE._a2 = _0xv _0xAUTOSHOOT(_0xv) end})
+    _0xMKKEY(_0xS4, "autoshoot_key", "Auto Shoot")
+    _0xS4:AddToggle("autoshoot_walls", {Text = "Auto Shoot Through Walls", Default = false, Callback = function(_0xv) _0xSTATE._a3 = _0xv end})
+
+    local _0xS4a = _0xT3:AddGroupbox({Side = "Right", Name = "Aimbot", IconName = "target"})
+    _0xS4a:AddToggle("aimbot_on", {Text = "Enable Aimbot", Default = false, Callback = function(_0xv) _0xSTATE._h8 = _0xv _0xAIMBOT(_0xv) end})
+    _0xMKKEY(_0xS4a, "aimbot_key", "Aimbot")
+    _0xS4a:AddSlider("aim_fov", {Text = "Aimbot FOV", Default = 250, Min = 20, Max = 800, Rounding = 0, Callback = function(_0xv) _0xSTATE._h10 = _0xv end})
+    _0xS4a:AddToggle("aim_fovvis", {Text = "Aimbot FOV Circle", Default = false, Callback = function(_0xv) _0xSTATE._h11 = _0xv if _0xC.afovc then _0xC.afovc.Visible = _0xv end end})
+    _0xS4a:AddSlider("aim_smooth", {Text = "Smoothness", Default = 0.2, Min = 0.05, Max = 1, Rounding = 2, Callback = function(_0xv) _0xSTATE._ha = _0xv end})
+
+    local _0xS4b = _0xT3:AddGroupbox({Side = "Right", Name = "Melee", IconName = "swords"})
+    _0xS4b:AddToggle("kaura_on", {Text = "Knife Aura", Default = false, Callback = function(_0xv) _0xKNIFE_AURA(_0xv) end})
+    _0xS4b:AddSlider("kaura_rng", {Text = "Aura Range", Default = 1, Min = 1, Max = 5, Rounding = 0, Callback = function(_0xv) _0xSTATE._k5 = _0xv end})
+end
+
+do
+    local _0xS8 = _0xT4:AddGroupbox({Side = "Left", Name = "Coin Farm", IconName = "coins"})
+    _0xS8:AddToggle("farm_coins", {Text = "Auto Collect Coins", Default = false, Callback = function(_0xv) _0xSTATE._f1 = _0xv _0xFARM_COINS(_0xv) end})
+    _0xS8:AddSlider("farm_speed", {Text = "Farm Speed", Default = 1, Min = 1, Max = 21, Rounding = 0, Callback = function(_0xv) _0xSTATE._f3 = _0xv end})
+    _0xS8:AddSlider("farm_wait", {Text = "Collect Wait", Default = 0.5, Min = 0.3, Max = 3, Rounding = 2, Callback = function(_0xv) _0xSTATE._f2 = _0xv end})
+    local _0xS8b = _0xT4:AddGroupbox({Side = "Right", Name = "Farm Stats", IconName = "chart-line"})
+    _0xFARM_LBL.st = _0xS8b:AddLabel({Text = "Status: Idle"})
+    _0xFARM_LBL.co = _0xS8b:AddLabel({Text = "Collected: 0"})
+    _0xFARM_LBL.ra = _0xS8b:AddLabel({Text = "Rate: 0.0 / min"})
+    _0xFARM_LBL.el = _0xS8b:AddLabel({Text = "Elapsed: 00:00"})
+    _0xFARM_LBL.lf = _0xS8b:AddLabel({Text = "Coins Left: 0"})
+    _0xFARM_LBL.di = _0xS8b:AddLabel({Text = "Distance: 0 studs"})
+    _0xFARM_LBL.sk = _0xS8b:AddLabel({Text = "Skipped: 0"})
+    _0xS8b:AddButton({Text = "Reset Stats", Func = function()
+        _0xFARM._stats.collected = 0
+        _0xFARM._stats.skipped = 0
+        _0xFARM._stats.start = _0xSTATE._f1 and os.clock() or 0
+        _0xFARM_UI(true)
+    end})
+
+    local _0xS5 = _0xT5:AddGroupbox({Side = "Left", Name = "Teleport", IconName = "navigation"})
+    _0xS5:AddButton({Text = "TP Murderer", Func = function() _0xTP_ROLE("Murderer") end})
+    _0xS5:AddButton({Text = "TP Sheriff", Func = function() _0xTP_ROLE("Sheriff") _0xTP_ROLE("Hero") end})
+    _0xS5:AddButton({Text = "TP Gun", Func = function() _0xTP_GUN() end})
+    local _0xPN = _0xPNAMES()
+    _0xSTATE._b3 = _0xPN[1]
+    local _0xTP_DD = _0xS5:AddDropdown("tp_player", {
+        Text = "Player",
+        Values = _0xPN,
+        Default = _0xPN[1],
+        Callback = function(_0xv) _0xSTATE._b3 = _0xv or "" end
+    })
+    _0xS5:AddButton({Text = "TP to Player", Func = function() _0xTP_PLAYER(_0xSTATE._b3) end})
+    _0xS5:AddButton({Text = "Server Hop", Func = function() _0xSERVER_HOP() end})
+    local function _0xTPDDU()
+        local _0xn = _0xPNAMES()
+        _0xTP_DD:SetValues(_0xn)
+        if not table.find(_0xn, _0xSTATE._b3) then _0xSTATE._b3 = _0xn[1] end
+        _0xTP_DD:SetValue(_0xSTATE._b3)
+    end
+    _0xb8c1.PlayerAdded:Connect(function() _0x39fd(_0xTPDDU) end)
+    _0xb8c1.PlayerRemoving:Connect(function() _0x39fd(_0xTPDDU) end)
+
+    local _0xS5b = _0xT5:AddGroupbox({Side = "Right", Name = "Cosmetics", IconName = "shirt"})
+    _0xS5b:AddToggle("fake_headless", {Text = "Fake Headless", Default = false, Callback = function(_0xv) _0xFAKE_HEADLESS(_0xv) end})
+    
+    local _0xS7 = _0xT6:AddGroupbox({Side = "Left", Name = "Fling", IconName = "zap"})
+    _0xS7:AddToggle("touch_fling", {Text = "Touch Fling", Default = false, Callback = function(_0xv) _0xSTATE._t1 = _0xv _0xTOUCH_FLING(_0xv) end})
+    _0xS7:AddSlider("fling_power", {Text = "Fling Power", Default = 500, Min = 50, Max = 5000, Rounding = 0, Callback = function(_0xv) _0xSTATE._t2 = _0xv end})
+    _0xS7:AddButton({Text = "Fling All", Func = function()
+        for _, _0xpl in _0x1248(_0xGP()) do
+            if _0xpl ~= _0x8ca5 and _0xpl.Character then _0xFLING_CHAR(_0xpl.Character, true) end
+        end
+    end})
+    _0xS7:AddToggle("spin_all", {Text = "Spin All", Default = false, Callback = function(_0xv) _0xSTATE._tc = _0xv _0xSPIN_ALL(_0xv) end})
+
+    local _0xS7b = _0xT6:AddGroupbox({Side = "Right", Name = "Orbit", IconName = "orbit"})
+    _0xS7b:AddToggle("orbit_on", {Text = "Orbit", Default = false, Callback = function(_0xv) _0xSTATE._t3 = _0xv _0xORBIT(_0xv) end})
+    local _0xotv = _0xPNAMES()
+    _0xSTATE._tb = _0xotv[1]
+    local _0xotd = _0xS7b:AddDropdown("orbit_target", {
+        Text = "Orbit Target",
+        Values = _0xotv,
+        Default = _0xotv[1],
+        Callback = function(_0xv) _0xSTATE._tb = _0xv or "none" end
+    })
+    _0xS7b:AddSlider("orbit_radius", {Text = "Orbit Radius", Default = 12, Min = 3, Max = 50, Rounding = 0, Callback = function(_0xv) _0xSTATE._t4 = _0xv end})
+    _0xS7b:AddSlider("orbit_speed", {Text = "Orbit Speed", Default = 3, Min = 1, Max = 20, Rounding = 0, Callback = function(_0xv) _0xSTATE._t5 = _0xv end})
+    _0xS7b:AddToggle("orbit_players", {Text = "Orbit Players", Default = false, Callback = function(_0xv) _0xSTATE._t6 = _0xv end})
+    local function _0xotdu()
+        local _0xn = _0xPNAMES()
+        _0xotd:SetValues(_0xn)
+        if not table.find(_0xn, _0xSTATE._tb) then _0xSTATE._tb = _0xn[1] end
+        _0xotd:SetValue(_0xSTATE._tb)
+    end
+    _0xb8c1.PlayerAdded:Connect(function() _0x39fd(_0xotdu) end)
+    _0xb8c1.PlayerRemoving:Connect(function() _0x39fd(_0xotdu) end)
+
+    local _0xS7c = _0xT6:AddGroupbox({Side = "Left", Name = "Visuals", IconName = "sparkles"})
+    _0xS7c:AddToggle("tag_on", {Text = "Custom Nametag", Default = false, Callback = function(_0xv) _0xSTATE._t7 = _0xv _0xNAMETAG_BUILD() end})
+    _0xS7c:AddInput("tag_text", {Text = "Nametag Text", Default = "trooll", Placeholder = "Nametag text", Callback = function(_0xv) _0xNAMETAG_TEXT(_0xv) end})
+    _0xS7c:AddToggle("esptag_on", {Text = "Custom ESP Tag", Default = false, Callback = function(_0xv) _0xSTATE._t9 = _0xv end})
+    _0xS7c:AddInput("esptag_text", {Text = "ESP Tag Text", Default = "trooll", Placeholder = "ESP tag text", Callback = function(_0xv) _0xSTATE._ta = _0xv end})
+    _0xS7c:AddToggle("rainbow_on", {Text = "Rainbow ESP", Default = false, Callback = function(_0xv) _0xSTATE._td = _0xv end})
+
+    local _0xS7d = _0xT6:AddGroupbox({Side = "Right", Name = "Effects", IconName = "sparkles"})
+    _0xS7d:AddToggle("aura_on", {Text = "Particle Aura", Default = false, Callback = function(_0xv) _0xSTATE._te = _0xv _0xPARTICLE_AURA(_0xv) end})
+    _0xS7d:AddToggle("trail_on", {Text = "Rainbow Trail", Default = false, Callback = function(_0xv) _0xSTATE._tf = _0xv _0xRAINBOW_TRAIL(_0xv) end})
+    _0xS7d:AddToggle("headspin_on", {Text = "Head Spin", Default = false, Callback = function(_0xv) _0xSTATE._tg = _0xv _0xHEAD_SPIN(_0xv) end})
+    _0xS7d:AddSlider("char_scale", {Text = "Character Scale", Default = 1, Min = 0.5, Max = 3, Rounding = 1, Callback = function(_0xv) _0xSTATE._th = _0xv _0xCHAR_SCALE(_0xv) end})
+end
+
+do
+    local _0xS6 = _0xT7:AddGroupbox({Side = "Left", Name = "Configs", IconName = "folder-cog"})
+    local _0xcfgv = _0xCFG_LIST()
+    if #_0xcfgv == 0 then _0xcfgv = {"none"} end
+    _0xCFG.values = _0xcfgv
+    _0xCFG.sel = _0xcfgv[1]
+    _0xCFG.input = _0xS6:AddInput("config_name", {
+        Text = "Config Name",
+        Default = "default",
+        Placeholder = "Config name",
+        Callback = function(_0xv) _0xCFG.name = _0xv end
+    })
+    _0xCFG.dd = _0xS6:AddDropdown("config_sel", {
+        Text = "Saved Configs",
+        Values = _0xcfgv,
+        Default = _0xcfgv[1],
+        AllowNull = true,
+        Callback = function(_0xv)
+            if _0xv then
+                _0xCFG.sel = _0xv
+            else
+                _0xCFG.sel = _0xCFG.values[1]
+            end
+        end
+    })
+    _0xS6:AddButton({Text = "Save Config", Func = function() _0xCFG_SAVE() end})
+    _0xS6:AddButton({Text = "Load Config", Func = function()
+        local _0xn = _0xCFG.sel
+        if not _0xn or _0xn == "none" then _0xn = _0xCFG.name end
+        _0xCFG_LOAD(_0xn)
+    end})
+    _0xS6:AddButton({Text = "Delete Config", Func = function()
+        local _0xn = _0xCFG.sel
+        if not _0xn or _0xn == "none" then _0xn = _0xCFG.name end
+        _0xCFG_DELETE(_0xn)
+    end})
+    _0xS6:AddButton({Text = "Refresh Configs", Func = function() _0xCFG_REFRESH() end})
+
+    local _0xS6d = _0xT7:AddGroupbox({Side = "Left", Name = "Watermark", IconName = "tag"})
+    _0xS6d:AddToggle("watermark_on", {Text = "Show Watermark", Default = true, Callback = function(_0xv) _0xSTATE._wm = _0xv end})
+
+    local _0xS6b = _0xT7:AddGroupbox({Side = "Right", Name = "Menu", IconName = "keyboard"})
+    _0xS6b:AddLabel("Menu Keybind"):AddKeyPicker("menu_key", {
+        Text = "Menu Keybind",
+        Default = "RightControl",
+        Mode = "Toggle",
+        Callback = function() end
+    })
+    _0xLIB.ToggleKeybind = _0xOPTS and _0xOPTS["menu_key"] or nil
+end
+
+do
+    local _0xRA = _0xR1:AddGroupbox({Side = "Left", Name = "Aimbot", IconName = "target"})
+    _0xRA:AddToggle("riv_aim", {Text = "Enable Aimbot", Default = false, Callback = function(_0xv) _0xRSTATE._c1 = _0xv _0xRIV.aimbot(_0xv) end})
+    _0xMKKEY(_0xRA, "riv_aim_key", "Aimbot")
+    _0xRA:AddToggle("riv_aim_sticky",{Text = "Sticky Target",Default = false, Callback = function(_0xv) _0xRSTATE._c9 = _0xv _0xRIV._lp = nil end})
+    _0xRA:AddSlider("riv_aim_fov", {Text = "FOV", Default = 150, Min = 20, Max = 600, Rounding = 0, Callback = function(_0xv) _0xRSTATE._c2 = _0xv end})
+    _0xRA:AddSlider("riv_aim_smooth", {Text = "Smoothing", Default = 0.4, Min = 0.05, Max = 1, Rounding = 2, Callback = function(_0xv) _0xRSTATE._c7 = _0xv end})
+    _0xRA:AddSlider("riv_aim_pred", {Text = "Prediction", Default = 0, Min = 0, Max = 0.5, Rounding = 3, Callback = function(_0xv) _0xRSTATE._cp = _0xv end})
+    _0xRA:AddToggle("riv_aim_vert", {Text = "Lead Vertically", Default = false, Callback = function(_0xv) _0xRSTATE._cv = _0xv end})
+    _0xRA:AddSlider("riv_aim_hc",{Text = "Hit Chance", Default = 100, Min = 1, Max = 100, Rounding = 0, Callback = function(_0xv) _0xRSTATE._c3 = _0xv end})
+    _0xRA:AddDropdown("riv_aim_part", {Text = "Target Part", Values = {"Head", "HumanoidRootPart", "UpperTorso", "Torso"}, Default = "Head", Callback = function(_0xv) _0xRSTATE._c6 = _0xv end})
+    _0xRA:AddToggle("riv_aim_fovc", {Text = "Show FOV Circle", Default = false, Callback = function(_0xv) _0xRSTATE._c5 = _0xv end})
+
+    local _0xRG = _0xR1:AddGroupbox({Side = "Right", Name = "Weapon", IconName = "crosshair"})
+    _0xRG:AddToggle("riv_nospread", {Text = "No Spread", Default = false, Callback = function(_0xv) _0xRSTATE._c4 = _0xv _0xRIV.apply() end})
+    _0xRG:AddToggle("riv_norecoil", {Text = "No Recoil", Default = false, Callback = function(_0xv) _0xRSTATE._cr = _0xv _0xRIV.apply() end})
+    _0xRG:AddToggle("riv_rate", {Text = "Faster Fire Rate", Default = false, Callback = function(_0xv) _0xRSTATE._cf = _0xv _0xRIV.apply() end})
+    _0xRG:AddSlider("riv_rate_mul", {Text = "Fire Rate x", Default = 2, Min = 1, Max = 10, Rounding = 1, Callback = function(_0xv) _0xRSTATE._cfr = _0xv _0xRIV.apply() end})
+    _0xRG:AddToggle("riv_reload", {Text = "Faster Reload", Default = false, Callback = function(_0xv) _0xRSTATE._cl = _0xv _0xRIV.apply() end})
+    _0xRG:AddSlider("riv_reload_mul", {Text = "Reload x", Default = 2, Min = 1, Max = 10, Rounding = 1, Callback = function(_0xv) _0xRSTATE._clr = _0xv _0xRIV.apply() end})
+
+    local _0xRS = _0xR1:AddGroupbox({Side = "Right", Name = "Silent Aim", IconName = "eye-off"})
+    _0xRS:AddToggle("riv_silent", {Text = "Silent Aim", Default = false, Callback = function(_0xv) _0xRSTATE._sa = _0xv if _0xv then _0xRIV.hookfire() end end})
+    _0xMKKEY(_0xRS, "riv_silent_key", "Silent Aim")
+    _0xRS:AddSlider("riv_silent_hc", {Text = "Hit Chance", Default = 100, Min = 1, Max = 100, Rounding = 0, Callback = function(_0xv) _0xRSTATE._sc = _0xv end})
+    _0xRS:AddSlider("riv_maxlead", {Text = "Max Lead", Default = 15, Min = 1, Max = 60, Rounding = 0, Callback = function(_0xv) _0xRSTATE._cm = _0xv end})
+
+    local _0xRR = _0xR1:AddGroupbox({Side = "Left", Name = "Ragebot", IconName = "flame"})
+    _0xRR:AddToggle("riv_rage", {Text = "Ragebot", Default = false, Callback = function(_0xv)
+        _0xRSTATE._rg = _0xv
+        _0xbb44(function()
+            if _0xv then
+                _0xRIV.req()
+                if not _0xRIV._ui then
+                    _0xNOTIF("Flamingo", "UseItem remote not found", 4)
+                elseif not _0xRIV._ut or not _0xRIV._en then
+                    _0xNOTIF("Flamingo", "Utility or EnumLibrary missing", 4)
+                end
+            end
+            _0xRIV.ragebot(_0xv)
+        end)
+    end})
+    _0xMKKEY(_0xRR, "riv_rage_key", "Ragebot")
+    _0xRR:AddSlider("riv_rage_rate", {Text = "Shots / sec", Default = 8, Min = 1, Max = 20, Rounding = 0, Callback = function(_0xv) _0xRSTATE._rr = _0xv end})
+    _0xRR:AddSlider("riv_maxdist", {Text = "Max Target Distance", Default = 400, Min = 50, Max = 2000, Rounding = 0, Callback = function(_0xv) _0xRSTATE._cd = _0xv end})
+    _0xRR:AddDropdown("riv_prio", {Text = "Priority", Values = {"Crosshair", "Distance"}, Default = "Crosshair", Callback = function(_0xv) _0xRSTATE._cq = _0xv end})
+
+    local _0xRE = _0xR2:AddGroupbox({Side = "Left", Name = "Player ESP", IconName = "eye"})
+    _0xRE:AddToggle("riv_esp_box", {Text = "Boxes", Default = false, Callback = function(_0xv) _0xRSTATE._e2 = _0xv end})
+    _0xRE:AddToggle("riv_esp_name", {Text = "Names", Default = false, Callback = function(_0xv) _0xRSTATE._e3 = _0xv end})
+    _0xRE:AddToggle("riv_esp_hp", {Text = "Health Bars", Default = false, Callback = function(_0xv) _0xRSTATE._e4 = _0xv end})
+    _0xRE:AddToggle("riv_esp_dist", {Text = "Distance", Default = false, Callback = function(_0xv) _0xRSTATE._e5 = _0xv end})
+    _0xRE:AddToggle("riv_esp_tracer", {Text = "Tracers", Default = false, Callback = function(_0xv) _0xRSTATE._v1 = _0xv end})
+    local _0xRDIAG = _0xRE:AddLabel({Text = "Targets: 0"})
+    _0x39fd(function()
+        while _0xabc0(0.5) do
+            _0xbb44(function()
+                local _0xn = #_0xRIV.list()
+                local _0xsrc = _0xRIV._fc and "fighters" or "characters"
+                _0xRDIAG:SetText(_0xc9d1("Targets: %d (%s)", _0xn, _0xsrc))
+            end)
+        end
+    end)
+    _0xRE:AddToggle("riv_esp_team", {Text = "Enemies Only", Default = true, Callback = function(_0xv) _0xRSTATE._e6 = _0xv end})
+    _0xRE:AddSlider("riv_esp_maxd", {Text = "Max Distance", Default = 2000, Min = 100, Max = 5000, Rounding = 0, Callback = function(_0xv) _0xRSTATE._e7 = _0xv end})
+    _0xRE:AddSlider("riv_esp_thick", {Text = "Box Thickness", Default = 1, Min = 1, Max = 5, Rounding = 0, Callback = function(_0xv) _0xRSTATE._e8 = _0xv end})
+
+    local _0xRC = _0xR2:AddGroupbox({Side = "Right", Name = "Colors", IconName = "palette"})
+    _0xMKCOL(_0xRC, "riv_col_box", "Box",_0x3fa1(255, 255, 255), function(_0xv) _0xRCOL.box = _0xv end)
+    _0xMKCOL(_0xRC, "riv_col_name", "Name", _0x3fa1(255, 255, 255), function(_0xv) _0xRCOL.name = _0xv end)
+    _0xMKCOL(_0xRC, "riv_col_dist", "Dist", _0x3fa1(200, 200, 210), function(_0xv) _0xRCOL.dist = _0xv end)
+    _0xMKCOL(_0xRC, "riv_col_tracer", "Tracer", _0x3fa1(255, 255, 255), function(_0xv) _0xRCOL.tracer = _0xv end)
+
+    local _0xRM = _0xR3:AddGroupbox({Side = "Left", Name = "Matchmaking", IconName = "swords"})
+    _0xRM:AddToggle("riv_queue", {Text = "Auto Queue", Default = false, Callback = function(_0xv) _0xRSTATE._a1 = _0xv end})
+    _0xRM:AddDropdown("riv_queue_mode", {Text = "Queue", Values = {"1v1", "2v2", "3v3", "4v4", "5v5", "2v2_beginner"}, Default = "1v1", Callback = function(_0xv) _0xRSTATE._a2 = _0xv end})
+    _0xRM:AddToggle("riv_vote", {Text = "Auto Vote Map", Default = false, Callback = function(_0xv) _0xRSTATE._a3 = _0xv end})
+    _0xRM:AddDropdown("riv_vote_map", {
+        Text = "Map",
+        Values = {"Arena", "Big Graveyard", "Docks", "Splash", "Bridge", "Crossroads", "Big Crossroads", "Big Backrooms", "Battleground", "Big Arena", "Construction", "Playground", "Onyx", "Graveyard", "Big Splash", "Big Onyx", "Backrooms", "Station", "Dimension"},
+        Default = "Arena",
+        Callback = function(_0xv) _0xRSTATE._a4 = _0xv end
+    })
+
+    local _0xRD = _0xR3:AddGroupbox({Side = "Left", Name = "Device Spoof", IconName = "smartphone"})
+    _0xRD:AddToggle("riv_spoof", {Text = "Enable Spoof", Default = false, Callback = function(_0xv) _0xRSTATE._aa = _0xv end})
+    _0xRD:AddDropdown("riv_spoof_type", {
+        Text = "Report As",
+        Values = {"PC", "Phone", "Console", "VR"},
+        Default = "Phone",
+        Callback = function(_0xv)
+            local _0xm = {PC = "MouseKeyboard", Phone = "Touch", Console = "Gamepad", VR = "VR"}
+            _0xRSTATE._ab = _0xm[_0xv] or "Touch"
+        end
+    })
+
+    local _0xRL = _0xR3:AddGroupbox({Side = "Right", Name = "Auto Loadout", IconName = "backpack"})
+    _0xRL:AddToggle("riv_loadout", {Text = "Auto Pick Weapons", Default = false, Callback = function(_0xv) _0xRSTATE._a5 = _0xv end})
+    _0xRL:AddDropdown("riv_primary", {
+        Text = "Primary",
+        Values = {"Crossbow", "Grenade Launcher", "Brust Rifle", "Distortion", "Flamethrower", "Shotgun", "RPG", "Assault Rifle", "Sniper", "Minigun", "Energy Rifle", "Paintball Gun", "Bow", "Gunblade"},
+        Default = "Assault Rifle",
+        Callback = function(_0xv) _0xRSTATE._a6 = _0xv end
+    })
+    _0xRL:AddDropdown("riv_secondary", {
+        Text = "Secondary",
+        Values = {"Slingshot", "Flare Gun", "Spray", "Shorty", "Energy Pistols", "Warper", "Daggers", "Scepter", "Exogun", "Revolver", "Uzi", "Glass Cannon", "Handgun"},
+        Default = "Handgun",
+        Callback = function(_0xv) _0xRSTATE._a7 = _0xv end
+    })
+    _0xRL:AddDropdown("riv_melee", {
+        Text = "Melee",
+        Values = {"Fists", "Scythe", "Battle Axe", "Trowel", "Riot Shield", "Glast Shard", "Knife", "Chainsaw", "Katana"},
+        Default = "Fists",
+        Callback = function(_0xv) _0xRSTATE._a8 = _0xv end
+    })
+    _0xRL:AddDropdown("riv_utility", {
+        Text = "Utility",
+        Values = {"Medkit", "Flashbang", "Elixir", "Subspace Tripmine", "War Horn", "Grenade", "Warpstone", "Molotov", "Freeze Ray", "RNG Dice", "Smoke Grenade", "Jump Pad", "Satchel"},
+        Default = "Grenade",
+        Callback = function(_0xv) _0xRSTATE._a9 = _0xv end
+    })
+end
+
+
+do
+    local _0xAA = _0xA1:AddGroupbox({Side = "Left", Name = "Aimbot", IconName = "target"})
+    _0xAA:AddToggle("ar_aim", {Text = "Enable Aimbot", Default = false, Callback = function(_0xv) _0xASTATE._t1 = _0xv _0xAR.aimbot(_0xv) end})
+    _0xMKKEY(_0xAA, "ar_aim_key", "Aimbot")
+    _0xAA:AddToggle("ar_sticky",{Text = "Sticky Target",Default = false, Callback = function(_0xv) _0xASTATE._tb = _0xv _0xAR._lp = nil end})
+    _0xAA:AddDropdown("ar_part",{Text = "Target Part", Values = {"Head", "HumanoidRootPart", "UpperTorso", "Torso"}, Default = "Head", Callback = function(_0xv) _0xASTATE._t2 = _0xv end})
+    _0xAA:AddSlider("ar_fov", {Text = "FOV", Default = 120, Min = 20, Max = 600, Rounding = 0, Callback = function(_0xv) _0xASTATE._t3 = _0xv end})
+    _0xAA:AddSlider("ar_smooth", {Text = "Smoothing", Default = 0.3, Min = 0.05, Max = 1, Rounding = 2, Callback = function(_0xv) _0xASTATE._t5 = _0xv end})
+    _0xAA:AddSlider("ar_pred", {Text = "Prediction", Default = 0, Min = 0, Max = 0.5, Rounding = 3, Callback = function(_0xv) _0xASTATE._tp = _0xv end})
+    _0xAA:AddToggle("ar_vert", {Text = "Lead Vertically", Default = false, Callback = function(_0xv) _0xASTATE._tv = _0xv end})
+    _0xAA:AddSlider("ar_range",{Text = "Max Range", Default = 1500, Min = 100, Max = 5000, Rounding = 0, Callback = function(_0xv) _0xASTATE._t8 = _0xv end})
+    _0xAA:AddToggle("ar_team", {Text = "Team Check", Default = true, Callback = function(_0xv) _0xASTATE._t4 = _0xv end})
+    _0xAA:AddDropdown("ar_prio", {Text = "Priority", Values = {"Crosshair", "Distance", "Lowest Health"}, Default = "Crosshair", Callback = function(_0xv) _0xASTATE._td = _0xv end})
+    _0xAA:AddSlider("ar_minhp", {Text = "Min Health %", Default = 0, Min = 0, Max = 100, Rounding = 0, Callback = function(_0xv) _0xASTATE._tc = _0xv end})
+    _0xAA:AddToggle("ar_wall",{Text = "Visible Only", Default = false, Callback = function(_0xv) _0xASTATE._t9 = _0xv end})
+
+    local _0xAT = _0xA1:AddGroupbox({Side = "Right", Name = "Triggerbot", IconName = "zap"})
+    _0xAT:AddToggle("ar_trig", {Text = "Triggerbot", Default = false, Callback = function(_0xv)
+        _0xASTATE._t7 = _0xv
+        _0xAR.trigger(_0xv)
+        if _0xv and type(mouse1click) ~= "function" then
+            _0xNOTIF("Flamingo", "Executor has no mouse1click", 4)
+        end
+    end})
+    _0xMKKEY(_0xAT, "ar_trig_key", "Triggerbot")
+    _0xAT:AddSlider("ar_trigdelay",{Text = "Click Delay", Default = 0.05, Min = 0.02, Max = 1, Rounding = 2, Callback = function(_0xv) _0xASTATE._ta = _0xv end})
+
+    local _0xAV = _0xA1:AddGroupbox({Side = "Right", Name = "World", IconName = "globe"})
+    _0xAV:AddToggle("ar_fb", {Text = "Fullbright", Default = false, Callback = function(_0xv) _0xFBRIGHT(_0xv) end})
+    _0xAV:AddSlider("ar_cfov", {Text = "Camera FOV", Default = 70, Min = 30, Max = 120, Rounding = 0, Callback = function(_0xv) _0xFOV_SET(_0xv) end})
+end
+
+do
+    local _0xKA = _0xR4:AddGroupbox({Side = "Left", Name = "Unlocker", IconName = "unlock"})
+    local _0xKST = _0xKA:AddLabel({Text = "Status: off", DoesWrap = true})
+    _0xKA:AddToggle("skin_on", {Text = "Unlock All Cosmetics", Default = false, Callback = function(_0xv)
+        _0xSKIN.on = _0xv
+        if _0xv then
+            local _0xok = _0xSKIN.start()
+            _0xKST:SetText(_0xok and "Status: active" or "Status: modules not found")
+            if _0xok then
+                _0xSKIN.rebuild()
+                _0xSKIN.rep("WeaponInventory")
+                _0xNOTIF("Flamingo", "Open the game's Equip menu to pick skins", 5)
+            end
+        else
+            _0xKST:SetText("Status: off")
+            _0xSKIN.rep("WeaponInventory")
+        end
+    end})
+    _0xKA:AddButton({Text = "Refresh Inventory", Func = function()
+        if not _0xSKIN.ready then return end
+        _0xSKIN.rebuild()
+        _0xSKIN.rep("WeaponInventory")
+        _0xSKIN.rep("FavoritedCosmetics")
+    end})
+    _0xKA:AddButton({Text = "Save To Disk", Func = function()
+        _0xSKIN.save()
+        _0xNOTIF("Flamingo", "Skins saved", 3)
+    end})
+    _0xKA:AddButton({Text = "Clear Held Weapon", Func = function()
+        local _0xw = _0xSKIN.held()
+        if not _0xw then return end
+        _0xSKIN.eq[_0xw] = nil
+        _0xSKIN.fin[_0xw] = nil
+        _0xSKIN.rebuild()
+        _0xSKIN.rep("WeaponInventory")
+        _0xSKIN.save()
+    end})
+    _0xKA:AddButton({Text = "Clear Everything", Func = function()
+        table.clear(_0xSKIN.eq)
+        table.clear(_0xSKIN.fin)
+        _0xSKIN.rebuild()
+        _0xSKIN.rep("WeaponInventory")
+        _0xSKIN.save()
+    end})
+
+    local _0xKB = _0xR4:AddGroupbox({Side = "Right", Name = "How To Use", IconName = "book-open"})
+    _0xKB:AddLabel({Text = "I seriously don't know what else to add here apart from unlock all.", DoesWrap = true})
+    local _0xKHELD = _0xKB:AddLabel({Text = "Holding: nothing", DoesWrap = true})
+    local _0xKLIST = _0xKB:AddLabel({Text = "Equipped on it: none", DoesWrap = true})
+
+    _0x39fd(function()
+        while _0xabc0(1) do
+            _0xbb44(function()
+                if not _0xSKIN.ready then return end
+                local _0xw = _0xSKIN.held()
+                _0xKHELD:SetText("Holding: " .. (_0xw or "nothing"))
+                local _0xcur = _0xw and _0xSKIN.eq[_0xw]
+                if _0xcur then
+                    local _0xp = {}
+                    for _0xct, _0xcd in _0x6790(_0xcur) do
+                        _0x4401(_0xp, _0xct .. ": " .. _0xf5c3(_0xcd.Name))
+                    end
+                    table.sort(_0xp)
+                    _0xKLIST:SetText(#_0xp > 0 and table.concat(_0xp, "\n") or "Equipped on it: none")
+                else
+                    _0xKLIST:SetText("Equipped on it: none")
+                end
+            end)
+        end
+    end)
+end
+
+do
+    local _0xWA = _0xR5:AddGroupbox({Side = "Left", Name = "Atmosphere", IconName = "cloud"})
+    _0xWA:AddDropdown("w_sky", {
+        Text = "Skybox",
+        Values = _0xSKY_NAMES(),
+        Default = "Default",
+        Callback = function(_0xv) _0xSTATE._skn = _0xv _0xSKY_SET(_0xv) end
+    })
+    _0xWA:AddToggle("w_skylight", {Text = "Match Lighting To Sky", Default = true, Callback = function(_0xv)
+        _0xSTATE._skl = _0xv
+        if _0xSTATE._skn and _0xSTATE._skn ~= "Default" then _0xSKY_SET(_0xSTATE._skn) end
+    end})
+    _0xWA:AddToggle("w_nofog", {Text = "Remove Fog", Default = false, Callback = function(_0xv)
+        _0xLIGHT_SAVE()
+        _0xbb44(function()
+            if _0xv then
+                _0xa4e6.FogEnd = 1e6
+                _0xa4e6.FogStart = 1e6
+            else
+                _0xa4e6.FogEnd = _0xC.lorig.fe
+                _0xa4e6.FogStart = _0xC.lorig.fs
+            end
+        end)
+    end})
+    _0xWA:AddButton({Text = "Restore World", Func = function()
+        _0xSKY_SET("Default")
+        _0xLIGHT_RESET()
+    end})
+
+    local _0xWL = _0xR5:AddGroupbox({Side = "Left", Name = "Lighting", IconName = "sun"})
+    _0xWL:AddToggle("w_fullbright", {Text = "Fullbright", Default = false, Callback = function(_0xv)
+        _0xLIGHT_SAVE()
+        _0xFBRIGHT(_0xv)
+        if not _0xv then _0xLIGHT_RESET() end
+    end})
+    _0xWL:AddSlider("w_bright", {Text = "Brightness", Default = 2, Min = 0, Max = 10, Rounding = 1, Callback = function(_0xv)
+        _0xLIGHT_SAVE()
+        _0xbb44(function() _0xa4e6.Brightness = _0xv end)
+    end})
+    _0xWL:AddSlider("w_clock", {Text = "Time Of Day", Default = 14, Min = 0, Max = 24, Rounding = 1, Callback = function(_0xv)
+        _0xLIGHT_SAVE()
+        _0xbb44(function() _0xa4e6.ClockTime = _0xv end)
+    end})
+    _0xWL:AddToggle("w_shadows", {Text = "Shadows", Default = true, Callback = function(_0xv)
+        _0xLIGHT_SAVE()
+        _0xbb44(function() _0xa4e6.GlobalShadows = _0xv end)
+    end})
+
+    local _0xWC = _0xR5:AddGroupbox({Side = "Right", Name = "Camera", IconName = "video"})
+    _0xWC:AddToggle("w_thirdperson", {Text = "Force Third Person", Default = false, Callback = function(_0xv) _0xRIV.pov(_0xv) end})
+    _0xWC:AddSlider("w_fov", {Text = "Field Of View", Default = 70, Min = 30, Max = 120, Rounding = 0, Callback = function(_0xv) _0xFOV_SET(_0xv) end})
+
+    local _0xWH = _0xR5:AddGroupbox({Side = "Right", Name = "Chams", IconName = "user"})
+    _0xWH:AddToggle("w_chams", {Text = "Chams", Default = false, Callback = function(_0xv) _0xRSTATE._v2 = _0xv _0xbb44(_0xRIV.chams) end})
+    _0xWH:AddToggle("w_chams_fill", {Text = "Show Fill", Default = true, Callback = function(_0xv) _0xRSTATE._vf = _0xv end})
+    _0xWH:AddToggle("w_chams_out", {Text = "Show Outline", Default = true, Callback = function(_0xv) _0xRSTATE._vo = _0xv end})
+    _0xWH:AddSlider("w_chams_alpha", {Text = "Fill Opacity", Default = 0.5, Min = 0, Max = 1, Rounding = 2, Callback = function(_0xv) _0xRSTATE._va = 1 - _0xv end})
+    _0xMKCOL(_0xWH, "w_chams_fc", "Fill Color", _0x3fa1(255, 255, 255), function(_0xv) _0xRSTATE._vfc = _0xv end)
+    _0xMKCOL(_0xWH, "w_chams_oc", "Outline Color", _0x3fa1(255, 42, 133), function(_0xv) _0xRSTATE._voc = _0xv end)
+end
+
+local _0xVOID = {conn = nil, home = nil, back = false, at = 0, spin = 0, jit = 0, hits = 0, lbl = nil}
+
+function _0xVOID.root()
+    local _0xch = _0x8ca5.Character
+    local _0xhm = _0xch and _0xGH(_0xch)
+    if not _0xch or not _0xhm or _0xhm.Health <= 0 then return nil end
+    local _0xr = _0xFC(_0xch, "HumanoidRootPart")
+    return (_0xr and _0xr.Parent) and _0xr or nil
+end
+
+function _0xVOID.alt()
+    return _0xSTATE._z2 * 25000 + _0xSTATE._z3
+end
+
+function _0xVOID.send()
+    local _0xr = _0xVOID.root()
+    if not _0xr then return end
+    local _0xy = _0xVOID.alt()
+    local _0xp = _0x7ce2(0, _0xy, 0)
+    if _0xSTATE._z4 == "Random" then
+        _0xp = _0x7ce2(_0xd200(-_0xSTATE._z6, _0xSTATE._z6), _0xy, _0xd200(-_0xSTATE._z6, _0xSTATE._z6))
+    end
+    _0xbb44(function() _0xr.CFrame = _0x4b58(_0xp) end)
+    _0xVOID.hits = _0xVOID.hits + 1
+    if _0xVOID.lbl then _0xbb44(function() _0xVOID.lbl:SetText("Teleports: " .. _0xVOID.hits) end) end
+end
+
+function _0xVOID.drift(_0xdt)
+    local _0xr = _0xVOID.root()
+    if not _0xr then return end
+    _0xVOID.spin = _0xVOID.spin + _0xSTATE._z5 * _0xdt
+    local _0xm = _0xSTATE._z4
+    local _0xy = _0xVOID.alt()
+    _0xbb44(function()
+        if _0xm == "Spin" then
+            _0xr.CFrame = _0x4b58(_0xr.Position) * CFrame.Angles(0, _0xVOID.spin, 0)
+        elseif _0xm == "Orbit" then
+            local _0xa = _0xVOID.spin * 1.5
+            _0xr.CFrame = _0x4b58(_0x7ce2(math.cos(_0xa) * _0xSTATE._z6, _0xy, math.sin(_0xa) * _0xSTATE._z6))
+        elseif _0xm == "Random" then
+            if _0xd200(1, 100) < _0xSTATE._z5 * _0xdt then
+                _0xr.CFrame = _0x4b58(_0x7ce2(_0xd200(-_0xSTATE._z6, _0xSTATE._z6), _0xy, _0xd200(-_0xSTATE._z6, _0xSTATE._z6)))
+            end
+        elseif _0xm == "Desync" then
+            local _0xx = math.sin(_0xVOID.spin * 50) * 10
+            local _0xz = math.cos(_0xVOID.spin * 50) * 10
+            _0xr.CFrame = _0x4b58(_0x7ce2(_0xx, _0xy, _0xz))
+                * CFrame.Angles(math.sin(_0xVOID.spin) * 0.5, math.cos(_0xVOID.spin) * 0.5, 0)
+        end
+    end)
+end
+
+function _0xVOID.twist(_0xdt)
+    local _0xr = _0xVOID.root()
+    if not _0xr then return end
+    local _0xp, _0xy = 0, 0
+    if _0xSTATE._z8 == "Flip" then _0xp = math.rad(180)
+    elseif _0xSTATE._z8 == "Up" then _0xp = math.rad(-90)
+    elseif _0xSTATE._z8 == "Down" then _0xp = math.rad(90) end
+    local _0xm = _0xSTATE._z9
+    if _0xm == "Jitter" then
+        _0xVOID.jit = (_0xVOID.jit + _0xSTATE._zb * _0xdt * 10) % math.max(1, _0xSTATE._za * 2)
+        _0xy = math.rad(_0xVOID.jit - _0xSTATE._za)
+    elseif _0xm == "Sway" then
+        _0xy = math.sin(_0xVOID.spin * (_0xSTATE._zb / 5)) * math.rad(_0xSTATE._za)
+    elseif _0xm == "Inverter" then
+        _0xy = (_0x11bf(_0xVOID.spin * 2) % 2 == 0) and 0 or math.rad(180)
+    elseif _0xm == "Spin" then
+        _0xy = _0xVOID.spin
+    end
+    _0xbb44(function() _0xr.CFrame = _0x4b58(_0xr.Position) * CFrame.Angles(_0xp, _0xy, 0) end)
+end
+
+function _0xVOID.run()
+    if _0xVOID.conn then return end
+    _0xVOID.conn = _0x55c0.Heartbeat:Connect(function(_0xdt)
+        if _0xVOID.back then
+            local _0xr = _0xVOID.root()
+            if _0xr and _0xVOID.home then
+                _0xbb44(function() _0xr.CFrame = _0xVOID.home end)
+            end
+            _0xVOID.back = false
+            return
+        end
+        if _0xSTATE._z1 then
+            if not _0xKEY("void_key") then return end
+            _0xVOID.send()
+            _0xVOID.drift(_0xdt)
+        end
+        if _0xSTATE._z7 and _0xKEY("aa_key") then
+            _0xVOID.spin = _0xVOID.spin + _0xSTATE._z5 * _0xdt
+            _0xVOID.twist(_0xdt)
+        end
+    end)
+end
+
+_0xLIB:OnUnload(function()
+    _0xSTATE._z1 = false
+    _0xSTATE._z7 = false
+    if _0xVOID.conn then _0xVOID.conn:Disconnect() _0xVOID.conn = nil end
+    if _0xVOID.home then
+        local _0xvr = _0xVOID.root()
+        if _0xvr then _0xbb44(function() _0xvr.CFrame = _0xVOID.home end) end
+    end
+end)
+
+do
+    local _0xVG = _0xT2:AddGroupbox({Side = "Right", Name = "Void Hide", IconName = "eye-off"})
+    _0xVG:AddToggle("void_on", {Text = "Void Spam", Default = false, Callback = function(_0xv)
+        _0xSTATE._z1 = _0xv
+        _0xbb44(function()
+            if _0xv then
+                local _0xr = _0xVOID.root()
+                if _0xr then _0xVOID.home = _0xr.CFrame end
+                _0xVOID.run()
+            else
+                _0xVOID.back = true
+            end
+        end)
+    end})
+    _0xMKKEY(_0xVG, "void_key", "Void")
+    _0xVG:AddDropdown("void_mode", {Text = "Pattern", Values = {"None", "Spin", "Orbit", "Random", "Desync"}, Default = "None", Callback = function(_0xv) _0xSTATE._z4 = _0xv end})
+    _0xVG:AddSlider("void_dist", {Text = "Height %", Default = 100, Min = 1, Max = 100, Rounding = 0, Callback = function(_0xv) _0xSTATE._z2 = _0xv end})
+    _0xVG:AddSlider("void_off", {Text = "Offset", Default = 0, Min = -1000, Max = 1000, Rounding = 0, Callback = function(_0xv) _0xSTATE._z3 = _0xv end})
+    _0xVG:AddSlider("void_speed", {Text = "Pattern Speed", Default = 10, Min = 0, Max = 100, Rounding = 1, Callback = function(_0xv) _0xSTATE._z5 = _0xv end})
+    _0xVG:AddSlider("void_radius", {Text = "Pattern Radius", Default = 25, Min = 1, Max = 200, Rounding = 0, Callback = function(_0xv) _0xSTATE._z6 = _0xv end})
+    _0xVOID.lbl = _0xVG:AddLabel({Text = "Teleports: 0"})
+
+    local _0xAG = _0xT2:AddGroupbox({Side = "Right", Name = "Anti Aim", IconName = "shield"})
+    _0xAG:AddToggle("aa_on", {Text = "Anti Aim", Default = false, Callback = function(_0xv)
+        _0xSTATE._z7 = _0xv
+        if _0xv then _0xbb44(_0xVOID.run) end
+    end})
+    _0xMKKEY(_0xAG, "aa_key", "Anti Aim")
+    _0xAG:AddDropdown("aa_pitch", {Text = "Pitch", Values = {"None", "Flip", "Up", "Down"}, Default = "None", Callback = function(_0xv) _0xSTATE._z8 = _0xv end})
+    _0xAG:AddDropdown("aa_mode", {Text = "Yaw", Values = {"None", "Jitter", "Sway", "Inverter", "Spin"}, Default = "None", Callback = function(_0xv) _0xSTATE._z9 = _0xv end})
+    _0xAG:AddSlider("aa_range", {Text = "Yaw Range", Default = 45, Min = 0, Max = 360, Rounding = 0, Callback = function(_0xv) _0xSTATE._za = _0xv end})
+    _0xAG:AddSlider("aa_speed", {Text = "Yaw Speed", Default = 15, Min = 1, Max = 30, Rounding = 0, Callback = function(_0xv) _0xSTATE._zb = _0xv end})
+end
+
+local _0xEXP = nil
+
+do
+    local _0xH1 = _0xT0:AddGroupbox({Side = "Left", Name = "Account", IconName = "user"})
+    local _0xage = tonumber(_0x8ca5.AccountAge) or 0
+    local _0xjoin = os.date("!%d %B %Y", os.time() - _0xage * 86400)
+    local _0xyears = _0xage / 365.25
+    _0xH1:AddLabel({Text = "User: " .. _0x8ca5.Name})
+    _0xH1:AddLabel({Text = "Display: " .. _0x8ca5.DisplayName})
+    _0xH1:AddLabel({Text = "User ID: " .. _0xf5c3(_0x8ca5.UserId)})
+    _0xH1:AddLabel({Text = "Joined: " .. _0xjoin})
+    _0xH1:AddLabel({Text = _0xc9d1("Account Age: %d days (%.1f yrs)", _0xage, _0xyears)})
+    _0xH1:AddLabel({Text = "Premium: " .. (_0x8ca5.MembershipType == Enum.MembershipType.Premium and "Yes" or "No")})
+
+    local _0xH2 = _0xT0:AddGroupbox({Side = "Left", Name = "Session", IconName = "activity"})
+    local _0xexec = "Unknown"
+    _0xbb44(function() if identifyexecutor then _0xexec = _0xf5c3(identifyexecutor()) end end)
+    local _0xdev = "Desktop"
+    if _0x3e7d.TouchEnabled and not _0x3e7d.MouseEnabled then _0xdev = "Mobile" end
+    if _0x3e7d.GamepadEnabled and not _0x3e7d.MouseEnabled then _0xdev = "Console" end
+    _0xH2:AddLabel({Text = "Executor: " .. _0xexec})
+    _0xH2:AddLabel({Text = "Device: " .. _0xdev})
+    _0xH2:AddLabel({Text = "Place ID: " .. _0xf5c3(game.PlaceId)})
+    local _0xHU = _0xH2:AddLabel({Text = "Uptime: 00:00"})
+    local _0xHP = _0xH2:AddLabel({Text = "Players: 0"})
+    local _0xHCK = _0xH2:AddLabel({Text = "Clock: --:--:--"})
+
+    local _0xH3 = _0xT0:AddGroupbox({Side = "Right", Name = "Experiences", IconName = "gamepad-2"})
+    local _0xGAMES = {
+        ["Murder Mystery 2"] = {tabs = _0xMM2_TABS, ids = {142823291, 66654135}},
+        ["Rivals"] = {tabs = _0xRIV_TABS, ids = {6035872082, 17625359962}},
+        ["Universal"] = {tabs = _0xAR_TABS, ids = {}},
+    }
+    local _0xhere = "Unsupported"
+    for _0xnm, _0xg in _0x6790(_0xGAMES) do
+        for _, _0xid in _0x1248(_0xg.ids) do
+            if game.PlaceId == _0xid or game.GameId == _0xid then _0xhere = _0xnm end
+        end
+    end
+    if _0xhere == "Unsupported" then
+        local _0xok, _0xinfo = _0xbb44(function() return game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId) end)
+        if _0xok and _0xinfo and _0xinfo.Name then
+            local _0xlo = _0xinfo.Name:lower()
+            if _0xlo:find("murder mystery") then _0xhere = "Murder Mystery 2" end
+            if _0xlo:find("rivals") then _0xhere = "Rivals" end
+        end
+    end
+    _0xH3:AddLabel({Text = "Detected: " .. _0xhere})
+
+    local _0xsel = _0xhere ~= "Unsupported" and _0xhere or "Universal"
+    local _0xHS = _0xH3:AddLabel({Text = "Loaded: none"})
+    _0xH3:AddDropdown("home_exp", {
+        Text = "Experience",
+        Values = {"Murder Mystery 2", "Rivals", "Universal"},
+        Default = _0xsel,
+        Callback = function(_0xv) _0xsel = _0xv end
+    })
+    _0xH3:AddButton({Text = "Load Experience", Func = function()
+        if _0xEXP then
+            _0xNOTIF("Flamingo", _0xEXP .. " is already loaded", 3)
+            return
+        end
+        local _0xg = _0xGAMES[_0xsel]
+        if not _0xg then return end
+        _0xEXP = _0xsel
+        for _, _0xtb in _0x1248(_0xg.tabs) do _0xbb44(function() _0xtb:SetVisible(true) end) end
+        for _, _0xtb in _0x1248(_0xSHARED_TABS) do _0xbb44(function() _0xtb:SetVisible(true) end) end
+        if _0xsel == "Rivals" then
+            _0xRIV.req()
+            _0xRIV.startloops()
+        end
+        _0xbb44(function()
+            _0xCFG_DIR = "Flamingo/configs/" .. _0xsel:gsub("[^%w]", "")
+            if not isfolder(_0xCFG_DIR) then makefolder(_0xCFG_DIR) end
+            _0xCFG_REFRESH()
+        end)
+        _0xHS:SetText("Loaded: " .. _0xsel)
+        _0xNOTIF("Flamingo", _0xsel .. " loaded", 3)
+    end})
+
+    _0x39fd(function()
+        local _0xstart = os.clock()
+        while _0xabc0(1) do
+            _0xbb44(function()
+                _0xHU:SetText("Uptime: " .. _0xFARM_CLOCK(os.clock() - _0xstart))
+                _0xHP:SetText("Players: " .. #_0xGP() .. " / " .. _0xb8c1.MaxPlayers)
+                _0xHCK:SetText("Clock: " .. os.date("%H:%M:%S"))
+            end)
+        end
+    end)
+end
+
+do
+    local _0xWM = nil
+    local _0xok = _0xbb44(function()
+        _0xWM = _0xLIB:AddDraggableLabel({Text = "Flamingo"})
+    end)
+    if _0xok and _0xWM then
+        _0xLIB:OnUnload(function()
+            _0xSTATE._wm = false
+            _0xbb44(function() _0xWM:Destroy() end)
+        end)
+        _0xbb44(function()
+            local _0xcn = _0xLIB.Corners[#_0xLIB.Corners]
+            if _0xcn and _0xcn.Parent and _0xcn.Parent:IsA("TextLabel") then
+                _0xcn.Parent.TextSize = 12
+            end
+        end)
+        local _0xstart = os.clock()
+        _0x39fd(function()
+            while _0xabc0(1) do
+                local _0xnow = os.clock()
+                local _0xel = _0xnow - _0xFPS.at
+                if _0xel > 0 then
+                    _0xFPS.v = _0x11bf(_0xFPS.n / _0xel + 0.5)
+                    _0xFPS.n = 0
+                    _0xFPS.at = _0xnow
+                end
+                if not _0xSTATE._wm then
+                    _0xbb44(function() _0xWM:SetVisible(false) end)
+                else
+                    _0xbb44(function()
+                        _0xWM:SetVisible(true)
+                        _0xWM:SetText(_0xc9d1(
+                            "Flamingo | %s | %d fps | %s",
+                            _0xEXP or "no game",
+                            _0xFPS.v,
+                            _0xFARM_CLOCK(_0xnow - _0xstart)
+                        ))
+                    end)
+                end
+            end
+        end)
+    end
+end
+
+local _0xMT = _0x8ca5:GetMouse()
+_0xMT.Button1Down:Connect(function()
+    if _0xSTATE._h4 then
+        local _0xtg = _0xSILENT()
+        if _0xtg then
+            _0xbb44(function()
+                local _0xch = _0x8ca5.Character
+                local _0xgn = _0xch and (_0xFC(_0xch, "Gun") or (_0x8ca5:FindFirstChild("Backpack") and _0xFC(_0x8ca5.Backpack, "Gun")))
+                if _0xgn then
+                    local _0xsv = _0xgn:FindFirstChild("GunServer") or _0xgn:FindFirstChild("ServerControl")
+                    if _0xsv then
+                        _0xsv:InvokeServer("fire", _0xtg.Position)
+                    else
+                        local _0xge = _0x72d4:FindFirstChild("GameEvent")
+                        if _0xge then _0xge:FireServer("fire", _0xgn, _0xtg.Position) end
+                    end
+                end
+            end)
+        end
+    end
+end)
+
+print("[Flamingo] Done")
